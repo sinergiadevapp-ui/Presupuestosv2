@@ -504,7 +504,7 @@
 
         <div class="btn-group-guardar">
             <button type="button" id="btn-submit-p1" class="btn" style="background-color:#2980b9; flex:1;" onclick="window.procesarPresupuesto(false)">Guardar Presupuesto</button>
-            <button type="button" id="btn-submit-p2" class="btn" style="flex:1;" onclick="window.procesarPresupuesto(true)">Guardar e Imprimir Presupuesto</button>
+            <button type="button" id="btn-submit-p2" class="btn" style="background-color:#e67e22; flex:1;" onclick="window.procesarPresupuesto(true)">Imprimir Presupuesto</button>
             <button type="button" id="btn-cancelar-presupuesto-edit" class="btn" style="background-color:#7f8c8d; display:none;" onclick="window.cancelarEdicionPresupuesto()">Cancelar Modificación</button>
         </div>
     </div>
@@ -693,7 +693,7 @@
             document.getElementById('emp-poblacion').value = miEmpresa.poblacion;
             document.getElementById('emp-telefono').value = miEmpresa.telefono;
             document.getElementById('emp-email').value = miEmpresa.email;
-            document.getElementById('emp-notas').value = miEmpresa.notes || '';
+            document.getElementById('emp-notes').value = miEmpresa.notes || '';
             const preview = document.getElementById('emp-logo-preview');
             if (miEmpresa.logo) {
                 preview.src = miEmpresa.logo;
@@ -769,6 +769,24 @@
         }
     }
 
+    // NUEVA FUNCIÓN: Iniciar presupuesto directamente asignando el cliente y saltando de pestaña
+    window.crearPresupuestoParaCliente = function(id, event) {
+        if(event) event.stopPropagation();
+        const c = clientes.find(cli => cli.id == id);
+        if(!c) return;
+
+        // Limpiar restos de ediciones anteriores si las hubiera
+        window.cancelarEdicionPresupuesto();
+
+        // Inyectar de forma directa en el buscador del formulario de presupuestos
+        document.getElementById('search-cliente').value = c.nombre;
+        document.getElementById('select-cliente-id').value = c.id;
+        document.getElementById('cliente-seleccionado-info').innerText = `✓ Cliente: ${c.nombre} seleccionado.`;
+
+        // Saltamos visualmente a la pestaña de creación
+        window.switchTab('tab-presupuestos');
+    }
+
     window.toggleDesplegarPresupuestos = function(clienteId) {
         clienteDesplegadoId = (clienteDesplegadoId === clienteId) ? null : clienteId;
         actualizarTablaClientes();
@@ -787,8 +805,9 @@
                 <td>${c.poblacion}</td>
                 <td>${c.telefono}</td>
                 <td class="td-actions">
-                    <button class="btn-action" onclick="window.editarCliente(${c.id}, event)">✏️</button>
-                    <button class="btn-action" onclick="window.eliminarCliente(${c.id}, event)">❌</button>
+                    <button class="btn-action" onclick="window.crearPresupuestoParaCliente(${c.id}, event)" title="Crear Presupuesto">➕📄</button>
+                    <button class="btn-action" onclick="window.editarCliente(${c.id}, event)" title="Editar">✏️</button>
+                    <button class="btn-action" onclick="window.eliminarCliente(${c.id}, event)" title="Eliminar">❌</button>
                 </td>
             `;
             tbody.appendChild(row);
@@ -1004,7 +1023,7 @@
         document.getElementById('pres-numero').value = "PRE-" + String(Math.max(...numeros) + 1).padStart(3, '0');
     }
 
-    // --- ACCIÓN CENTRAL: GUARDAR / IMPRIMIR PRESUPUESTO ---
+    // --- ACCIÓN CENTRAL: PROCESAR PRESUPUESTO ---
     window.procesarPresupuesto = async function(lanzarImpresion) {
         const idEdit = document.getElementById('edit-pres-id').value;
         const clienteId = document.getElementById('select-cliente-id').value;
@@ -1051,11 +1070,8 @@
         actualizarTablaClientes();
 
         if (lanzarImpresion) {
-            // Inyectamos de forma síncrona en el bloque aislado oculto
             inyectarDatosBloqueImpresion(objPres);
-            // Ejecutamos la impresión nativa
             window.print();
-            // Limpiamos los campos una vez completado el envío al spool del navegador
             limpiarFormularioPresupuesto();
             generarSiguienteNumeroPresupuesto();
         } else {
@@ -1104,7 +1120,7 @@
 
         document.getElementById('titulo-form-presupuesto').innerText = "Modificar Presupuesto (" + pres.numero + ")";
         document.getElementById('btn-submit-p1').innerText = "Guardar Cambios";
-        document.getElementById('btn-submit-p2').innerText = "Guardar e Imprimir Cambios";
+        document.getElementById('btn-submit-p2').innerText = "Imprimir Cambios";
         document.getElementById('btn-cancelar-presupuesto-edit').style.display = "inline-block";
         window.switchTab('tab-presupuestos');
     }
@@ -1113,7 +1129,7 @@
         document.getElementById('edit-pres-id').value = "";
         document.getElementById('titulo-form-presupuesto').innerText = "Generar Presupuesto";
         document.getElementById('btn-submit-p1').innerText = "Guardar Presupuesto";
-        document.getElementById('btn-submit-p2').innerText = "Guardar e Imprimir Presupuesto";
+        document.getElementById('btn-submit-p2').innerText = "Imprimir Presupuesto";
         document.getElementById('btn-cancelar-presupuesto-edit').style.display = "none";
         limpiarFormularioPresupuesto();
         generarSiguienteNumeroPresupuesto();
