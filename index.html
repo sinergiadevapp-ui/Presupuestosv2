@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Presupuestos Profesional</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #18bc9c;
+            --background-color: #f8f9fa;
+            --card-background: #ffffff;
+            --text-color: #333333;
+            --border-color: #dddddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            text-align: center;
+        }
+
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .btn-google {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 12px;
+            background-color: white;
+            color: #3c4043;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-google:hover {
+            background-color: #f8f9fa;
+            box-shadow: 0 1px 3px rgba(60,64,67,0.3);
+        }
+
+        .btn-google svg {
+            width: 18px;
+            height: 18px;
+            display: block;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--card-background);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: none;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 15px;
+            padding-right: 120px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+        }
+
+        .top-actions {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        .btn-config-top {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .btn-config-top:hover {
+            transform: rotate(45deg);
+        }
+
+        .btn-logout {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background-color: #e9ecef;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .grid-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        input, select, textarea {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        button.btn {
+            padding: 10px 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        button.btn:hover {
+            background-color: #128f76;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Estilos específicos para las acciones y filas de clientes */
+        .fila-cliente {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .fila-cliente:hover {
+            background-color: #f1f2f6;
+        }
+        .td-actions {
+            white-space: nowrap;
+            text-align: right;
+        }
+        .btn-action {
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+        .presupuestos-desplegables-container {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .presupuesto-item-list {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px var(--secondary-color);
+            border-bottom: 1px dashed #ccc;
+        }
+
+        .search-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 0 0 4px 4px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 99;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .search-item {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f1f1;
+        }
+
+        .search-item:hover {
+            background-color: #f8f9fa;
+            color: var(--secondary-color);
+        }
+
+        .items-contenedor {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            background: #fbfbfb;
+        }
+
+        .item-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .item-row .desc-container { flex: 3; position: relative; display: flex; flex-direction: column; }
+        .item-row input.art-cant { flex: 0.8; }
+        .item-row input.art-precio { flex: 1; }
+
+        .totales-presupuesto {
+            text-align: right;
+            margin-top: 20px;
+            font-size: 1.1rem;
+        }
+
+        .logo-preview {
+            max-width: 150px;
+            max-height: 80px;
+            margin-top: 10px;
+            border: 1px dashed var(--border-color);
+            padding: 5px;
+            display: none;
+        }
+
+        .preview-presupuesto {
+            border: 1px solid #aaa;
+            padding: 40px;
+            margin-top: 30px;
+            background: white;
+            display: none;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+            align-items: center;
+        }
+
+        .print-logo {
+            max-width: 200px;
+            max-height: 90px;
+            object-fit: contain;
+            display: none;
+        }
+
+        .btn-group-guardar {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            .preview-presupuesto, .preview-presupuesto * { visibility: visible; }
+            .preview-presupuesto { position: absolute; left: 0; top: 0; width: 100%; border: none; padding: 0; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="login-screen" class="login-container no-print">
+    <div class="login-card">
+        <h2 style="color: var(--primary-color); margin-bottom: 10px;">Presupuestos Cloud</h2>
+        <p style="color: #666; font-size: 0.9rem;">Accede con tu cuenta de Google de forma segura para gestionar tus presupuestos.</p>
+        
+        <button class="btn-google" onclick="loginConGoogle()">
+            <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
+                <path fill="#4285F4" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"></path>
+            </svg>
+            Iniciar sesión con Google
+        </button>
+    </div>
+</div>
+
+<div id="app-container" class="container">
+    <header class="no-print">
+        <h1>Sistema de Gestión de Presupuestos</h1>
+        <div class="top-actions">
+            <button class="btn-config-top" onclick="switchTab('tab-configuracion')" title="Configuración de Empresa">⚙️</button>
+            <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <div class="tabs no-print" id="main-tabs">
+        <button class="tab-btn active" id="btn-tab-presupuestos" onclick="switchTab('tab-presupuestos')">Crear Presupuesto</button>
+        <button class="tab-btn" id="btn-tab-clientes" onclick="switchTab('tab-clientes')">Clientes</button>
+        <button class="tab-btn" id="btn-tab-inventario" onclick="switchTab('tab-inventario')">Inventario</button>
+    </div>
+
+    <div id="tab-configuracion" class="tab-content">
+        <h2>Datos de mi Empresa / Autónomo</h2>
+        <form id="form-config">
+            <div class="grid-form">
+                <div class="form-group">
+                    <label>CIF / NIF / DNI</label>
+                    <input type="text" id="emp-cif" required>
+                </div>
+                <div class="form-group">
+                    <label>Nombre Comercial / Completo</label>
+                    <input type="text" id="emp-nombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Dirección</label>
+                    <input type="text" id="emp-direccion" required>
+                </div>
+                <div class="form-group">
+                    <label>Código Postal</label>
+                    <input type="text" id="emp-cp" required>
+                </div>
+                <div class="form-group">
+                    <label>Población / Ciudad</label>
+                    <input type="text" id="emp-poblacion" required>
+                </div>
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="tel" id="emp-telefono" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="emp-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Logo de la Empresa</label>
+                    <input type="file" id="emp-logo-input" accept="image/*" onchange="procesarLogo(this)">
+                    <img id="emp-logo-preview" class="logo-preview" alt="Vista previa del logo">
+                </div>
+            </div>
+
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border-color);">
+            
+            <h2>Condiciones y Garantías (Notas del Presupuesto)</h2>
+            <div class="form-group full-width" style="margin-bottom: 20px;">
+                <label>Texto de notas legales, validez o exclusiones de garantía:</label>
+                <textarea id="emp-notas" rows="5" placeholder="Ej. La garantía de este producto es de 3 años..."></textarea>
+            </div>
+
+            <button type="button" class="btn" onclick="guardarConfiguracion()">Guardar Configuración</button>
+            <button type="button" class="btn" style="background-color: #7f8c8d;" onclick="switchTab('tab-presupuestos')">Volver</button>
+        </form>
+    </div>
+
+    <div id="tab-clientes" class="tab-content">
+        <h2 id="titulo-form-cliente">Añadir Nuevo Cliente</h2>
+        <form id="form-cliente" onsubmit="guardarCliente(event)">
+            <input type="hidden" id="edit-cli-id">
+            <div class="grid-form">
+                <div class="form-group">
+                    <label>CIF / NIF</label>
+                    <input type="text" id="cli-cif" required>
+                </div>
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="cli-nombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Dirección</label>
+                    <input type="text" id="cli-direccion" required>
+                </div>
+                <div class="form-group">
+                    <label>Código Postal</label>
+                    <input type="text" id="cli-cp" required>
+                </div>
+                <div class="form-group">
+                    <label>Población / Ciudad</label>
+                    <input type="text" id="cli-poblacion" required>
+                </div>
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="tel" id="cli-telefono" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="cli-email" required>
+                </div>
+            </div>
+            <button type="submit" class="btn" id="btn-guardar-cliente">Guardar Cliente</button>
+            <button type="button" class="btn" id="btn-cancelar-cliente-edit" style="background-color:#7f8c8d; display:none;" onclick="cancelarEdicionCliente()">Cancelar Edición</button>
+        </form>
+
+        <h3 style="margin-top: 30px;">Listado de Clientes Existentes</h3>
+        <p style="font-size:0.85rem; color:#666;">* Haz clic en la fila de un cliente para ver o imprimir sus presupuestos guardados.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>CIF</th>
+                    <th>Nombre</th>
+                    <th>Población</th>
+                    <th>Teléfono</th>
+                    <th style="text-align: right;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-clientes-cuerpo"></tbody>
+        </table>
+    </div>
+
+    <div id="tab-inventario" class="tab-content">
+        <h2>Añadir Artículo al Inventario</h2>
+        <form id="form-inventario" onsubmit="guardarInventario(event)">
+            <div class="grid-form">
+                <div class="form-group">
+                    <label>Código Articulo/EAN</label>
+                    <input type="text" id="inv-ean" placeholder="Ej. 8410000000000" required>
+                </div>
+                <div class="form-group">
+                    <label>Descripción del Artículo</label>
+                    <input type="text" id="inv-desc" placeholder="Ej. Martillo de acero" required>
+                </div>
+                <div class="form-group">
+                    <label>Unidades</label>
+                    <input type="text" id="inv-unidades" value="Infinito" placeholder="Ej. 50 o Infinito" required>
+                </div>
+                <div class="form-group">
+                    <label>Precio de Venta (€)</label>
+                    <input type="number" id="inv-precio" step="0.01" placeholder="0.00" required>
+                </div>
+            </div>
+            <button type="submit" class="btn">Guardar en Inventario</button>
+        </form>
+
+        <h3 style="margin-top: 30px;">Inventario Disponible</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Articulo/EAN</th>
+                    <th>Descripción</th>
+                    <th>Unidades</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-inventario-cuerpo"></tbody>
+        </table>
+    </div>
+
+    <div id="tab-presupuestos" class="tab-content active">
+        <h2>Generar Presupuesto</h2>
+        <div class="grid-form">
+            <div class="form-group">
+                <label>Buscar / Seleccionar Cliente</label>
+                <input type="text" id="search-cliente" placeholder="Escribe nombre o CIF del cliente..." autocomplete="off">
+                <input type="hidden" id="select-cliente-id">
+                <div id="cliente-results" class="search-dropdown" style="display:none;"></div>
+                <div id="cliente-seleccionado-info" style="margin-top:5px; font-size:0.85rem; color:var(--secondary-color); font-weight:bold;"></div>
+            </div>
+            <div class="form-group">
+                <label>Número de Presupuesto</label>
+                <input type="text" id="pres-numero" value="PRE-001">
+            </div>
+        </div>
+
+        <h3>Artículos / Conceptos</h3>
+        <div class="items-contenedor">
+            <div id="lista-articulos">
+                <div class="item-row">
+                    <div class="desc-container">
+                        <input type="text" placeholder="Escribe para buscar por Artículo o Articulo/EAN..." class="art-desc" autocomplete="off" oninput="buscarArticuloRealtime(this)" required>
+                        <div class="search-dropdown" style="display:none;"></div>
+                    </div>
+                    <input type="number" placeholder="Cant" class="art-cant" value="1" min="1" oninput="calcularTotales()" required>
+                    <input type="number" placeholder="Precio (€)" class="art-precio" step="0.01" oninput="calcularTotales()" required>
+                    <button type="button" class="btn" style="background-color: #e74c3c;" onclick="eliminarFila(this)">X</button>
+                </div>
+            </div>
+            <button type="button" class="btn" style="background-color: #34495e; margin-top: 10px;" onclick="añadirFilaArticulo()">+ Añadir Artículo</button>
+        </div>
+
+        <div class="totales-presupuesto">
+            <p><strong>Subtotal:</strong> <span id="val-subtotal">0.00</span>€</p>
+            <p><strong>IVA (21%):</strong> <span id="val-iva">0.00</span>€</p>
+            <p style="font-size: 1.4rem; color: var(--primary-color);"><strong>Total Presupuesto:</strong> <span id="val-total">0.00</span>€</p>
+        </div>
+
+        <div class="btn-group-guardar">
+            <button type="button" class="btn" style="background-color: #2980b9; flex: 1;" onclick="procesarPresupuesto(false)">Guardar Presupuesto</button>
+            <button type="button" class="btn" style="flex: 1;" onclick="procesarPresupuesto(true)">Guardar e Imprimir Presupuesto</button>
+        </div>
+
+        <div id="vista-previa" class="preview-presupuesto">
+            <div class="preview-header">
+                <div id="print-logo-container">
+                    <img id="print-logo" class="print-logo" src="" alt="Logo Empresa">
+                </div>
+                <div id="print-datos-empresa"></div>
+                <div style="text-align: right;">
+                    <h2 style="color: var(--primary-color);">PRESUPUESTO</h2>
+                    <p><strong>Número:</strong> <span id="print-num-pres"></span></p>
+                    <p><strong>Fecha:</strong> <span id="print-fecha"></span></p>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 30px; background: #eee; padding: 15px; border-radius: 4px;">
+                <h4>DATOS DEL CLIENTE:</h4>
+                <div id="print-datos-cliente"></div>
+            </div>
+
+            <table id="print-tabla-articulos">
+                <thead>
+                    <tr>
+                        <th>Descripción</th>
+                        <th style="text-align: center; width: 80px;">Cant.</th>
+                        <th style="text-align: right; width: 120px;">P. Unitario</th>
+                        <th style="text-align: right; width: 150px;">Total</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <div style="text-align: right; margin-bottom: 40px;">
+                <p>Subtotal: <span id="print-subtotal"></span>€</p>
+                <p>IVA (21%): <span id="print-iva"></span>€</p>
+                <h3>TOTAL: <span id="print-total"></span>€</h3>
+            </div>
+
+            <div style="border-top: 1px solid #777; padding-top: 15px; font-size: 0.85rem; color: #555;">
+                <h4>Condiciones y Garantías:</h4>
+                <p id="print-notas" style="white-space: pre-line;"></p>
+            </div>
+            
+            <button class="btn no-print" style="margin-top:20px; background-color:#2980b9;" onclick="window.print()">Lanzar Impresión / Guardar PDF</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAYVpthEEYKuw_doweVdQ3oQs3ec0qnLeE",
+        authDomain: "presupuestos-f68b8.firebaseapp.com",
+        projectId: "presupuestos-f68b8",
+        storageBucket: "presupuestos-f68b8.firebasestorage.app",
+        messagingSenderId: "812697144653",
+        appId: "1:812697144653:web:c77beae4d1c2359566bb04",
+        measurementId: "G-B2E276ZLSE"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app); 
+    const provider = new GoogleAuthProvider();
+
+    let usuarioActual = null;
+    let clientes = [];
+    let inventario = [];
+    let presupuestos = [];
+    let miEmpresa = {};
+    let clienteDesplegadoId = null;
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            usuarioActual = user;
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app-container').style.display = 'block';
+            cargarDatosDesdeFirestore(); 
+        } else {
+            usuarioActual = null;
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('app-container').style.display = 'none';
+        }
+    });
+
+    window.loginConGoogle = function() {
+        signInWithPopup(auth, provider).catch(error => alert("Error al autenticar con Google: " + error.message));
+    }
+
+    window.logout = function() {
+        signOut(auth).then(() => {
+            limpiarFormulariosAlSalir();
+        });
+    }
+
+    function limpiarFormulariosAlSalir() {
+        document.getElementById('form-config').reset();
+        document.getElementById('form-cliente').reset();
+        document.getElementById('form-inventario').reset();
+        document.getElementById('emp-logo-preview').style.display = 'none';
+        document.getElementById('cliente-seleccionado-info').innerText = '';
+        document.getElementById('vista-previa').style.display = 'none';
+        clientes = [];
+        inventario = [];
+        presupuestos = [];
+        miEmpresa = {};
+        clienteDesplegadoId = null;
+    }
+
+    async function cargarDatosDesdeFirestore() {
+        if (!usuarioActual) return;
+        try {
+            const userDocRef = doc(db, "users", usuarioActual.uid);
+            const docSnap = await getDoc(userDocRef);
+
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                clientes = data.clientes || [];
+                inventario = data.inventario || [];
+                presupuestos = data.presupuestos || [];
+                miEmpresa = data.miEmpresa || {};
+                
+                cargarConfiguracionUI();
+                actualizarTablaClientes();
+                actualizarTablaInventario();
+                generarSiguienteNumeroPresupuesto();
+            }
+        } catch (error) {
+            console.error("Error al leer desde Firestore: ", error);
+        }
+    }
+
+    async function sincronizarConFirestore() {
+        if (!usuarioActual) return;
+        try {
+            const userDocRef = doc(db, "users", usuarioActual.uid);
+            await setDoc(userDocRef, {
+                clientes: clientes,
+                inventario: inventario,
+                presupuestos: presupuestos,
+                miEmpresa: miEmpresa
+            }, { merge: true }); 
+        } catch (error) {
+            console.error("Error al escribir en Cloud Firestore: ", error);
+        }
+    }
+
+    window.switchTab = function(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        
+        const mainTabs = document.getElementById('main-tabs');
+        if (tabId === 'tab-configuracion') {
+            mainTabs.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        } else {
+            const activeBtn = document.getElementById('btn-' + tabId);
+            if(activeBtn) activeBtn.classList.add('active');
+        }
+        document.getElementById('vista-previa').style.display = 'none';
+    }
+
+    window.procesarLogo = function(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('emp-logo-preview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                miEmpresa.logo = e.target.result; 
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    window.guardarConfiguracion = async function() {
+        miEmpresa.cif = document.getElementById('emp-cif').value;
+        miEmpresa.nombre = document.getElementById('emp-nombre').value;
+        miEmpresa.direccion = document.getElementById('emp-direccion').value;
+        miEmpresa.cp = document.getElementById('emp-cp').value;
+        miEmpresa.poblacion = document.getElementById('emp-poblacion').value;
+        miEmpresa.telefono = document.getElementById('emp-telefono').value;
+        miEmpresa.email = document.getElementById('emp-email').value;
+        miEmpresa.notes = document.getElementById('emp-notas').value;
+
+        await sincronizarConFirestore();
+        alert('Configuración corporativa guardada.');
+        switchTab('tab-presupuestos');
+    }
+
+    function cargarConfiguracionUI() {
+        if(miEmpresa.cif) {
+            document.getElementById('emp-cif').value = miEmpresa.cif;
+            document.getElementById('emp-nombre').value = miEmpresa.nombre;
+            document.getElementById('emp-direccion').value = miEmpresa.direccion;
+            document.getElementById('emp-cp').value = miEmpresa.cp;
+            document.getElementById('emp-poblacion').value = miEmpresa.poblacion;
+            document.getElementById('emp-telefono').value = miEmpresa.telefono;
+            document.getElementById('emp-email').value = miEmpresa.email;
+            document.getElementById('emp-notas').value = miEmpresa.notes || '';
+            const preview = document.getElementById('emp-logo-preview');
+            if (miEmpresa.logo) {
+                preview.src = miEmpresa.logo;
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+    }
+
+    // --- CRUD CLIENTES ---
+    window.guardarCliente = async function(e) {
+        e.preventDefault();
+        const idEdit = document.getElementById('edit-cli-id').value;
+        
+        const datosCliente = {
+            cif: document.getElementById('cli-cif').value,
+            nombre: document.getElementById('cli-nombre').value,
+            direccion: document.getElementById('cli-direccion').value,
+            cp: document.getElementById('cli-cp').value,
+            poblacion: document.getElementById('cli-poblacion').value,
+            telefono: document.getElementById('cli-telefono').value,
+            email: document.getElementById('cli-email').value
+        };
+
+        if (idEdit) {
+            // Modo Edición
+            const index = clientes.findIndex(c => c.id == idEdit);
+            if(index !== -1) {
+                clientes[index] = { ...clientes[index], ...datosCliente };
+                alert('Cliente actualizado con éxito.');
+            }
+            cancelarEdicionCliente();
+        } else {
+            // Modo Creación
+            datosCliente.id = Date.now();
+            clientes.push(datosCliente);
+            alert('Cliente registrado con éxito.');
+            document.getElementById('form-cliente').reset();
+        }
+
+        await sincronizarConFirestore();
+        actualizarTablaClientes();
+    }
+
+    window.editarCliente = function(id, event) {
+        event.stopPropagation(); 
+        const c = clientes.find(cli => cli.id == id);
+        if(!c) return;
+
+        document.getElementById('edit-cli-id').value = c.id;
+        document.getElementById('cli-cif').value = c.cif;
+        document.getElementById('cli-nombre').value = c.nombre;
+        document.getElementById('cli-direccion').value = c.direccion;
+        document.getElementById('cli-cp').value = c.cp;
+        document.getElementById('cli-poblacion').value = c.poblacion;
+        document.getElementById('cli-telefono').value = c.telefono;
+        document.getElementById('cli-email').value = c.email;
+
+        document.getElementById('titulo-form-cliente').innerText = "Editar Cliente: " + c.nombre;
+        document.getElementById('btn-guardar-cliente').innerText = "Actualizar Cliente";
+        document.getElementById('btn-cancelar-cliente-edit').style.display = "inline-block";
+        document.getElementById('form-cliente').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    window.cancelarEdicionCliente = function() {
+        document.getElementById('edit-cli-id').value = "";
+        document.getElementById('form-cliente').reset();
+        document.getElementById('titulo-form-cliente').innerText = "Añadir Nuevo Cliente";
+        document.getElementById('btn-guardar-cliente').innerText = "Guardar Cliente";
+        document.getElementById('btn-cancelar-cliente-edit').style.display = "none";
+    }
+
+    window.eliminarCliente = async function(id, event) {
+        event.stopPropagation();
+        if(confirm("¿Estás seguro de que deseas eliminar este cliente? Esta acción no se puede deshacer.")) {
+            clientes = clientes.filter(c => c.id != id);
+            // Opcional: Filtrar o desvincular los presupuestos del cliente eliminado
+            presupuestos = presupuestos.filter(p => p.clienteId != id);
+            
+            await sincronizarConFirestore();
+            actualizarTablaClientes();
+            alert("Cliente eliminado correctamente.");
+        }
+    }
+
+    window.toggleDesplegarPresupuestos = function(clienteId) {
+        if(clienteDesplegadoId === clienteId) {
+            clienteDesplegadoId = null;
+        } else {
+            clienteDesplegadoId = clienteId;
+        }
+        actualizarTablaClientes();
+    }
+
+    function actualizarTablaClientes() {
+        const tbody = document.getElementById('tabla-clientes-cuerpo');
+        tbody.innerHTML = '';
+        
+        clientes.forEach(c => {
+            // Fila principal del cliente
+            const row = document.createElement('tr');
+            row.className = 'fila-cliente';
+            row.onclick = () => toggleDesplegarPresupuestos(c.id);
+            row.innerHTML = `
+                <td>${c.cif}</td>
+                <td><strong>${c.nombre}</strong></td>
+                <td>${c.poblacion}</td>
+                <td>${c.telefono}</td>
+                <td class="td-actions">
+                    <button class="btn-action" onclick="editarCliente(${c.id}, event)" title="Editar">✏️</button>
+                    <button class="btn-action" onclick="eliminarCliente(${c.id}, event)" title="Eliminar">❌</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+
+            // Si está desplegado, inyectamos la lista de sus presupuestos guardados
+            if(clienteDesplegadoId === c.id) {
+                const presupuestosFiltrados = presupuestos.filter(p => p.clienteId == c.id);
+                const subRow = document.createElement('tr');
+                subRow.className = 'no-print';
+                
+                let htmlPresupuestos = `<div class="presupuestos-desplegables-container">`;
+                if(presupuestosFiltrados.length > 0) {
+                    htmlPresupuestos += `<h4>Presupuestos asociados:</h4>`;
+                    presupuestosFiltrados.forEach(p => {
+                        htmlPresupuestos += `
+                            <div class="presupuesto-item-list">
+                                <span><strong>${p.numero}</strong> - ${p.fecha} (${p.total.toFixed(2)}€)</span>
+                                <button class="btn" style="padding: 4px 10px; font-size:0.8rem; background-color: var(--primary-color);" onclick="reImprimirPresupuesto('${p.id}')">🖨️ Imprimir</button>
+                            </div>
+                        `;
+                    });
+                } else {
+                    htmlPresupuestos += `<p style="color:#777; font-size:0.9rem;">Este cliente no tiene ningún presupuesto guardado todavía.</p>`;
+                }
+                htmlPresupuestos += `</div>`;
+
+                subRow.innerHTML = `<td colspan="5" style="padding:0;">${htmlPresupuestos}</td>`;
+                tbody.appendChild(subRow);
+            }
+        });
+    }
+
+    // --- BUSCADOR CLIENTES EN PRESUPUESTO ---
+    const inputCliente = document.getElementById('search-cliente');
+    const resultsCliente = document.getElementById('cliente-results');
+    const infoCliente = document.getElementById('cliente-seleccionado-info');
+
+    inputCliente.addEventListener('input', function() {
+        const value = this.value.toLowerCase().trim();
+        resultsCliente.innerHTML = '';
+        
+        if(!value) {
+            resultsCliente.style.display = 'none';
+            return;
+        }
+
+        const filtrados = clientes.filter(c => 
+            c.nombre.toLowerCase().includes(value) || c.cif.toLowerCase().includes(value)
+        );
+
+        if(filtrados.length > 0) {
+            resultsCliente.style.display = 'block';
+            filtrados.forEach(c => {
+                const div = document.createElement('div');
+                div.className = 'search-item';
+                div.innerHTML = `<strong>${c.nombre}</strong> <small style="color:#777;">(${c.cif})</small>`;
+                div.onclick = function() {
+                    inputCliente.value = c.nombre;
+                    document.getElementById('select-cliente-id').value = c.id;
+                    infoCliente.innerText = `✓ Cliente: ${c.nombre} seleccionado.`;
+                    resultsCliente.style.display = 'none';
+                };
+                resultsCliente.appendChild(div);
+            });
+        } else {
+            resultsCliente.style.display = 'none';
+        }
+    });
+
+    document.addEventListener('click', function(e) {
+        if(!inputCliente.contains(e.target) && !resultsCliente.contains(e.target)) {
+            resultsCliente.style.display = 'none';
+        }
+    });
+
+
+    // --- INVENTARIO ---
+    window.guardarInventario = async function(e) {
+        e.preventDefault();
+        const unidadesInput = document.getElementById('inv-unidades').value.trim();
+        
+        const nuevoArticulo = {
+            id: Date.now(),
+            ean: document.getElementById('inv-ean').value,
+            desc: document.getElementById('inv-desc').value,
+            unidades: unidadesInput === "" ? "Infinito" : unidadesInput,
+            precio: parseFloat(document.getElementById('inv-precio').value)
+        };
+
+        inventario.push(nuevoArticulo);
+        await sincronizarConFirestore();
+
+        document.getElementById('form-inventario').reset();
+        document.getElementById('inv-unidades').value = "Infinito";
+        actualizarTablaInventario();
+        alert('Artículo añadido al inventario.');
+    }
+
+    function actualizarTablaInventario() {
+        const tbody = document.getElementById('tabla-inventario-cuerpo');
+        tbody.innerHTML = '';
+        inventario.forEach(i => {
+            const row = `<tr>
+                <td style="font-family:monospace;">${i.ean}</td>
+                <td>${i.desc}</td>
+                <td>${i.unidades}</td>
+                <td>${i.precio.toFixed(2)}€</td>
+            </tr>`;
+            tbody.innerHTML += row;
+        });
+    }
+
+    // --- LÓGICA DE CREACIÓN DE PRESUPUESTOS ---
+    window.buscarArticuloRealtime = function(input) {
+        const row = input.closest('.item-row');
+        const dropdown = row.querySelector('.search-dropdown');
+        const precioInput = row.querySelector('.art-precio');
+        const value = input.value.toLowerCase().trim();
+
+        dropdown.innerHTML = '';
+
+        if(!value) {
+            dropdown.style.display = 'none';
+            return;
+        }
+
+        const filtrados = inventario.filter(i => 
+            i.desc.toLowerCase().includes(value) || i.ean.toLowerCase().includes(value)
+        );
+
+        if(filtrados.length > 0) {
+            dropdown.style.display = 'block';
+            filtrados.forEach(i => {
+                const div = document.createElement('div');
+                div.className = 'search-item';
+                div.innerHTML = `<small style="color:#2c3e50;font-family:monospace;margin-right:5px;">[${i.ean}]</small> <span>${i.desc}</span> <small style="color:#777;">(Stock: ${i.unidades})</small> - <strong>${i.precio.toFixed(2)}€</strong>`;
+                div.onclick = function() {
+                    input.value = i.desc;
+                    precioInput.value = i.precio;
+                    dropdown.style.display = 'none';
+                    calcularTotales();
+                };
+                dropdown.appendChild(div);
+            });
+        } else {
+            dropdown.style.display = 'none';
+        }
+    }
+
+    document.addEventListener('click', function(e) {
+        document.querySelectorAll('.item-row').forEach(row => {
+            const dropdown = row.querySelector('.search-dropdown');
+            const input = row.querySelector('.art-desc');
+            if(dropdown && input && !input.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+    });
+
+    window.añadirFilaArticulo = function() {
+        const contenedor = document.getElementById('lista-articulos');
+        const nuevaFila = document.createElement('div');
+        nuevaFila.className = 'item-row';
+        nuevaFila.innerHTML = `
+            <div class="desc-container">
+                <input type="text" placeholder="Escribe para buscar por Artículo o Articulo/EAN..." class="art-desc" autocomplete="off" oninput="buscarArticuloRealtime(this)" required>
+                <div class="search-dropdown" style="display:none;"></div>
+            </div>
+            <input type="number" placeholder="Cant" class="art-cant" value="1" min="1" oninput="calcularTotales()" required>
+            <input type="number" placeholder="Precio (€)" class="art-precio" step="0.01" oninput="calcularTotales()" required>
+            <button type="button" class="btn" style="background-color: #e74c3c;" onclick="eliminarFila(this)">X</button>
+        `;
+        contenedor.appendChild(nuevaFila);
+    }
+
+    window.eliminarFila = function(btn) {
+        const filas = document.querySelectorAll('.item-row');
+        if (filas.length > 1) {
+            btn.parentElement.remove();
+            calcularTotales();
+        } else {
+            alert('El presupuesto debe contener al menos un artículo.');
+        }
+    }
+
+    window.calcularTotales = function() {
+        let subtotal = 0;
+        const filas = document.querySelectorAll('.item-row');
+        
+        filas.forEach(fila => {
+            const cant = parseFloat(fila.querySelector('.art-cant').value) || 0;
+            const precio = parseFloat(fila.querySelector('.art-precio').value) || 0;
+            subtotal += (cant * precio);
+        });
+
+        const iva = subtotal * 0.21;
+        const total = subtotal + iva;
+
+        document.getElementById('val-subtotal').innerText = subtotal.toFixed(2);
+        document.getElementById('val-iva').innerText = iva.toFixed(2);
+        document.getElementById('val-total').innerText = total.toFixed(2);
+    }
+
+    function generarSiguienteNumeroPresupuesto() {
+        if(presupuestos.length === 0) {
+            document.getElementById('pres-numero').value = "PRE-001";
+            return;
+        }
+        // Buscar el número más alto
+        const numeros = presupuestos.map(p => {
+            const match = p.numero.match(/\d+/);
+            return match ? parseInt(match[0], 10) : 0;
+        });
+        const max = Math.max(...numeros);
+        const siguiente = max + 1;
+        document.getElementById('pres-numero').value = "PRE-" + String(siguiente).padStart(3, '0');
+    }
+
+    // --- ACCIÓN DE GUARDAR / IMPRIMIR PRESUPUESTO ---
+    window.procesarPresupuesto = async function(lanzarImpresion) {
+        const clienteId = document.getElementById('select-cliente-id').value;
+        const numeroPres = document.getElementById('pres-numero').value;
+        
+        if (!clienteId) {
+            alert('Por favor, selecciona un cliente válido usando el buscador.');
+            return;
+        }
+        if (!miEmpresa.cif) {
+            alert('Por favor, rellena los datos de tu empresa en el icono de configuración (⚙️) antes de continuar.');
+            return;
+        }
+
+        // Construir estructura de artículos
+        const items = [];
+        const filas = document.querySelectorAll('.item-row');
+        let formValido = true;
+
+        filas.forEach(fila => {
+            const desc = fila.querySelector('.art-desc').value.trim();
+            const cant = parseFloat(fila.querySelector('.art-cant').value) || 0;
+            const precio = parseFloat(fila.querySelector('.art-precio').value) || 0;
+
+            if(!desc || cant <= 0 || precio <= 0) formValido = false;
+
+            items.push({ desc, cant, precio });
+        });
+
+        if(!formValido) {
+            alert("Por favor, rellena correctamente todos los campos de artículos con valores mayores a 0.");
+            return;
+        }
+
+        const subtotal = parseFloat(document.getElementById('val-subtotal').innerText);
+        const iva = parseFloat(document.getElementById('val-iva').innerText);
+        const total = parseFloat(document.getElementById('val-total').innerText);
+
+        // Crear objeto de presupuesto estructurado
+        const nuevoPresupuesto = {
+            id: "PRES-" + Date.now(),
+            clienteId: parseInt(clienteId, 10),
+            numero: numeroPres,
+            fecha: new Date().toLocaleDateString('es-ES'),
+            items: items,
+            subtotal: subtotal,
+            iva: iva,
+            total: total
+        };
+
+        // Guardar o actualizar en el array global
+        presupuestos.push(nuevoPresupuesto);
+        await sincronizarConFirestore();
+
+        // Generar la UI de vista previa para impresión
+        inyectarVistaPreviaImpresion(nuevoPresupuesto);
+
+        alert('Presupuesto guardado con éxito en la nube.');
+
+        // Resetear pestaña de presupuesto y actualizar tablas
+        actualizarTablaClientes();
+        limpiarFormularioPresupuesto();
+        generarSiguienteNumeroPresupuesto();
+
+        if (lanzarImpresion) {
+            // Mostrar la vista previa en pantalla por si acaso y lanzar impresión nativa
+            document.getElementById('vista-previa').style.display = 'block';
+            setTimeout(() => { window.print(); }, 300);
+        }
+    }
+
+    function limpiarFormularioPresupuesto() {
+        document.getElementById('search-cliente').value = "";
+        document.getElementById('select-cliente-id').value = "";
+        document.getElementById('cliente-seleccionado-info').innerText = "";
+        
+        // Dejar solo una fila de artículo limpia
+        const contenedor = document.getElementById('lista-articulos');
+        contenedor.innerHTML = `
+            <div class="item-row">
+                <div class="desc-container">
+                    <input type="text" placeholder="Escribe para buscar por Artículo o Articulo/EAN..." class="art-desc" autocomplete="off" oninput="buscarArticuloRealtime(this)" required>
+                    <div class="search-dropdown" style="display:none;"></div>
+                </div>
+                <input type="number" placeholder="Cant" class="art-cant" value="1" min="1" oninput="calcularTotales()" required>
+                <input type="number" placeholder="Precio (€)" class="art-precio" step="0.01" oninput="calcularTotales()" required>
+                <button type="button" class="btn" style="background-color: #e74c3c;" onclick="eliminarFila(this)">X</button>
+            </div>
+        `;
+        document.getElementById('val-subtotal').innerText = "0.00";
+        document.getElementById('val-iva').innerText = "0.00";
+        document.getElementById('val-total').innerText = "0.00";
+    }
+
+    function inyectarVistaPreviaImpresion(pres) {
+        const clienteSel = clientes.find(c => c.id == pres.clienteId);
+        if(!clienteSel) return;
+
+        const imgPrint = document.getElementById('print-logo');
+        if (miEmpresa.logo) {
+            imgPrint.src = miEmpresa.logo;
+            imgPrint.style.display = 'block';
+        } else {
+            imgPrint.style.display = 'none';
+        }
+
+        document.getElementById('print-datos-empresa').innerHTML = `
+            <strong>${miEmpresa.nombre}</strong><br>
+            CIF: ${miEmpresa.cif}<br>
+            ${miEmpresa.direccion}<br>
+            ${miEmpresa.cp} - ${miEmpresa.poblacion}<br>
+            Tlf: ${miEmpresa.telefono} | Email: ${miEmpresa.email}
+        `;
+
+        document.getElementById('print-num-pres').innerText = pres.numero;
+        document.getElementById('print-fecha').innerText = pres.fecha;
+
+        document.getElementById('print-datos-cliente').innerHTML = `
+            <strong>Nombre:</strong> ${clienteSel.nombre} <br>
+            <strong>CIF/NIF:</strong> ${clienteSel.cif} <br>
+            <strong>Dirección:</strong> ${clienteSel.direccion}, ${clienteSel.cp}, ${clienteSel.poblacion} <br>
+            <strong>Contacto:</strong> ${clienteSel.telefono} | ${clienteSel.email}
+        `;
+
+        const tbodyPrint = document.querySelector('#print-tabla-articulos tbody');
+        tbodyPrint.innerHTML = '';
+        
+        pres.items.forEach(item => {
+            const totalFila = item.cant * item.precio;
+            const row = `<tr>
+                <td>${item.desc}</td>
+                <td style="text-align: center;">${item.cant}</td>
+                <td style="text-align: right;">${item.precio.toFixed(2)}€</td>
+                <td style="text-align: right;">${totalFila.toFixed(2)}€</td>
+            </tr>`;
+            tbodyPrint.innerHTML += row;
+        });
+
+        document.getElementById('print-subtotal').innerText = pres.subtotal.toFixed(2);
+        document.getElementById('print-iva').innerText = pres.iva.toFixed(2);
+        document.getElementById('print-total').innerText = pres.total.toFixed(2);
+        document.getElementById('print-notes').innerText = miEmpresa.notes || 'Sin observaciones.';
+    }
+
+    // --- RE-IMPRIMIR DESDE PESTAÑA CLIENTES ---
+    window.reImprimirPresupuesto = function(presId) {
+        const pres = presupuestos.find(p => p.id === presId);
+        if(!pres) return;
+
+        inyectarVistaPreviaImpresion(pres);
+        
+        // Hacer scroll y mostrar el layout de impresión abajo
+        const vistaPrevia = document.getElementById('vista-previa');
+        vistaPrevia.style.display = 'block';
+        vistaPrevia.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+</body>
+</html>
