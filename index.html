@@ -230,7 +230,6 @@
             color: white;
         }
 
-        /* Estilos específicos para las acciones y filas de clientes */
         .fila-cliente {
             cursor: pointer;
             transition: background 0.2s;
@@ -351,15 +350,38 @@
             margin-top: 20px;
         }
 
+        /* Toast / Alerta flotante temporal */
+        .toast-alerta {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #2ecc71;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            font-weight: bold;
+            z-index: 1000;
+            display: none;
+            animation: fadin 0.3s ease-in-out;
+        }
+
+        @keyframes fadin {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         @media print {
             body * { visibility: hidden; }
             .preview-presupuesto, .preview-presupuesto * { visibility: visible; }
-            .preview-presupuesto { position: absolute; left: 0; top: 0; width: 100%; border: none; padding: 0; }
-            .no-print { display: none; }
+            .preview-presupuesto { position: absolute; left: 0; top: 0; width: 100%; border: none; padding: 0; display: block !important; }
+            .no-print { display: none !important; }
         }
     </style>
 </head>
 <body>
+
+<div id="toast" class="toast-alerta">✓ ¡Guardado correctamente en la nube!</div>
 
 <div id="login-screen" class="login-container no-print">
     <div class="login-card">
@@ -481,7 +503,7 @@
         </form>
 
         <h3 style="margin-top: 30px;">Listado de Clientes Existentes</h3>
-        <p style="font-size:0.85rem; color:#666;">* Haz clic en la fila de un cliente para ver o imprimir sus presupuestos guardados.</p>
+        <p style="font-size:0.85rem; color:#666;">* Haz clic en la fila de un cliente para ver, modificar, borrar o imprimir sus presupuestos asociados.</p>
         <table>
             <thead>
                 <tr>
@@ -497,8 +519,9 @@
     </div>
 
     <div id="tab-inventario" class="tab-content">
-        <h2>Añadir Artículo al Inventario</h2>
+        <h2 id="titulo-form-inventario">Añadir Artículo al Inventario</h2>
         <form id="form-inventario" onsubmit="guardarInventario(event)">
+            <input type="hidden" id="edit-inv-id">
             <div class="grid-form">
                 <div class="form-group">
                     <label>Código Articulo/EAN</label>
@@ -517,7 +540,8 @@
                     <input type="number" id="inv-precio" step="0.01" placeholder="0.00" required>
                 </div>
             </div>
-            <button type="submit" class="btn">Guardar en Inventario</button>
+            <button type="submit" class="btn" id="btn-guardar-inventario">Guardar en Inventario</button>
+            <button type="button" class="btn" id="btn-cancelar-inventario-edit" style="background-color:#7f8c8d; display:none;" onclick="cancelarEdicionInventario()">Cancelar Edición</button>
         </form>
 
         <h3 style="margin-top: 30px;">Inventario Disponible</h3>
@@ -528,6 +552,7 @@
                     <th>Descripción</th>
                     <th>Unidades</th>
                     <th>Precio</th>
+                    <th style="text-align: right;">Acciones</th>
                 </tr>
             </thead>
             <tbody id="tabla-inventario-cuerpo"></tbody>
@@ -535,7 +560,8 @@
     </div>
 
     <div id="tab-presupuestos" class="tab-content active">
-        <h2>Generar Presupuesto</h2>
+        <h2 id="titulo-form-presupuesto">Generar Presupuesto</h2>
+        <input type="hidden" id="edit-pres-id">
         <div class="grid-form">
             <div class="form-group">
                 <label>Buscar / Seleccionar Cliente</label>
@@ -546,7 +572,7 @@
             </div>
             <div class="form-group">
                 <label>Número de Presupuesto</label>
-                <input type="text" id="pres-numero" value="PRE-001">
+                <input type="text" id="pres-numero" value="PRE-001" readonly style="background-color: #e9ecef; cursor: not-allowed;">
             </div>
         </div>
 
@@ -573,8 +599,9 @@
         </div>
 
         <div class="btn-group-guardar">
-            <button type="button" class="btn" style="background-color: #2980b9; flex: 1;" onclick="procesarPresupuesto(false)">Guardar Presupuesto</button>
-            <button type="button" class="btn" style="flex: 1;" onclick="procesarPresupuesto(true)">Guardar e Imprimir Presupuesto</button>
+            <button type="button" id="btn-submit-p1" class="btn" style="background-color: #2980b9; flex: 1;" onclick="procesarPresupuesto(false)">Guardar Presupuesto</button>
+            <button type="button" id="btn-submit-p2" class="btn" style="flex: 1;" onclick="procesarPresupuesto(true)">Guardar e Imprimir Presupuesto</button>
+            <button type="button" id="btn-cancelar-presupuesto-edit" class="btn" style="background-color:#7f8c8d; display:none;" onclick="cancelarEdicionPresupuesto()">Cancelar Modificación</button>
         </div>
 
         <div id="vista-previa" class="preview-presupuesto">
@@ -721,8 +748,16 @@
                 miEmpresa: miEmpresa
             }, { merge: true }); 
         } catch (error) {
-            console.error("Error al escribir en Cloud Firestore: ", error);
+            console.error("Error al escribir en Firestore: ", error);
         }
+    }
+
+    function mostrarToast() {
+        const toast = document.getElementById('toast');
+        toast.style.display = 'block';
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 2500);
     }
 
     window.switchTab = function(tabId) {
@@ -765,7 +800,7 @@
         miEmpresa.notes = document.getElementById('emp-notas').value;
 
         await sincronizarConFirestore();
-        alert('Configuración corporativa guardada.');
+        mostrarToast();
         switchTab('tab-presupuestos');
     }
 
@@ -805,22 +840,19 @@
         };
 
         if (idEdit) {
-            // Modo Edición
             const index = clientes.findIndex(c => c.id == idEdit);
             if(index !== -1) {
                 clientes[index] = { ...clientes[index], ...datosCliente };
-                alert('Cliente actualizado con éxito.');
             }
             cancelarEdicionCliente();
         } else {
-            // Modo Creación
             datosCliente.id = Date.now();
             clientes.push(datosCliente);
-            alert('Cliente registrado con éxito.');
             document.getElementById('form-cliente').reset();
         }
 
         await sincronizarConFirestore();
+        mostrarToast();
         actualizarTablaClientes();
     }
 
@@ -854,14 +886,12 @@
 
     window.eliminarCliente = async function(id, event) {
         event.stopPropagation();
-        if(confirm("¿Estás seguro de que deseas eliminar este cliente? Esta acción no se puede deshacer.")) {
+        if(confirm("¿Estás seguro de eliminar este cliente? Se borrarán sus presupuestos asociados.")) {
             clientes = clientes.filter(c => c.id != id);
-            // Opcional: Filtrar o desvincular los presupuestos del cliente eliminado
             presupuestos = presupuestos.filter(p => p.clienteId != id);
             
             await sincronizarConFirestore();
             actualizarTablaClientes();
-            alert("Cliente eliminado correctamente.");
         }
     }
 
@@ -879,7 +909,6 @@
         tbody.innerHTML = '';
         
         clientes.forEach(c => {
-            // Fila principal del cliente
             const row = document.createElement('tr');
             row.className = 'fila-cliente';
             row.onclick = () => toggleDesplegarPresupuestos(c.id);
@@ -895,7 +924,6 @@
             `;
             tbody.appendChild(row);
 
-            // Si está desplegado, inyectamos la lista de sus presupuestos guardados
             if(clienteDesplegadoId === c.id) {
                 const presupuestosFiltrados = presupuestos.filter(p => p.clienteId == c.id);
                 const subRow = document.createElement('tr');
@@ -908,7 +936,11 @@
                         htmlPresupuestos += `
                             <div class="presupuesto-item-list">
                                 <span><strong>${p.numero}</strong> - ${p.fecha} (${p.total.toFixed(2)}€)</span>
-                                <button class="btn" style="padding: 4px 10px; font-size:0.8rem; background-color: var(--primary-color);" onclick="reImprimirPresupuesto('${p.id}')">🖨️ Imprimir</button>
+                                <div>
+                                    <button class="btn" style="padding: 4px 10px; font-size:0.8rem; background-color: var(--primary-color);" onclick="reImprimirPresupuesto('${p.id}', event)">🖨️ Imprimir</button>
+                                    <button class="btn" style="padding: 4px 10px; font-size:0.8rem; background-color: #f39c12;" onclick="cargarEditarPresupuesto('${p.id}', event)">✏️ Modificar</button>
+                                    <button class="btn" style="padding: 4px 10px; font-size:0.8rem; background-color: #e74c3c;" onclick="eliminarPresupuesto('${p.id}', event)">❌ Borrar</button>
+                                </div>
                             </div>
                         `;
                     });
@@ -966,27 +998,68 @@
         }
     });
 
-
-    // --- INVENTARIO ---
+    // --- CRUD INVENTARIO (MODIFICAR Y BORRAR ARTÍCULOS) ---
     window.guardarInventario = async function(e) {
         e.preventDefault();
+        const idEdit = document.getElementById('edit-inv-id').value;
         const unidadesInput = document.getElementById('inv-unidades').value.trim();
         
-        const nuevoArticulo = {
-            id: Date.now(),
+        const datosArticulo = {
             ean: document.getElementById('inv-ean').value,
             desc: document.getElementById('inv-desc').value,
             unidades: unidadesInput === "" ? "Infinito" : unidadesInput,
             precio: parseFloat(document.getElementById('inv-precio').value)
         };
 
-        inventario.push(nuevoArticulo);
-        await sincronizarConFirestore();
+        if(idEdit) {
+            const index = inventario.findIndex(i => i.id == idEdit);
+            if(index !== -1) {
+                inventario[index] = { ...inventario[index], ...datosArticulo };
+            }
+            cancelarEdicionInventario();
+        } else {
+            datosArticulo.id = Date.now();
+            inventario.push(datosArticulo);
+            document.getElementById('form-inventario').reset();
+            document.getElementById('inv-unidades').value = "Infinito";
+        }
 
+        await sincronizarConFirestore();
+        mostrarToast();
+        actualizarTablaInventario();
+    }
+
+    window.editarInventario = function(id) {
+        const item = inventario.find(i => i.id == id);
+        if(!item) return;
+
+        document.getElementById('edit-inv-id').value = item.id;
+        document.getElementById('inv-ean').value = item.ean;
+        document.getElementById('inv-desc').value = item.desc;
+        document.getElementById('inv-unidades').value = item.unidades;
+        document.getElementById('inv-precio').value = item.precio;
+
+        document.getElementById('titulo-form-inventario').innerText = "Modificar Artículo";
+        document.getElementById('btn-guardar-inventario').innerText = "Actualizar Artículo";
+        document.getElementById('btn-cancelar-inventario-edit').style.display = "inline-block";
+        document.getElementById('form-inventario').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    window.cancelarEdicionInventario = function() {
+        document.getElementById('edit-inv-id').value = "";
         document.getElementById('form-inventario').reset();
         document.getElementById('inv-unidades').value = "Infinito";
-        actualizarTablaInventario();
-        alert('Artículo añadido al inventario.');
+        document.getElementById('titulo-form-inventario').innerText = "Añadir Artículo al Inventario";
+        document.getElementById('btn-guardar-inventario').innerText = "Guardar en Inventario";
+        document.getElementById('btn-cancelar-inventario-edit').style.display = "none";
+    }
+
+    window.eliminarInventario = async function(id) {
+        if(confirm("¿Estás seguro de que deseas eliminar este artículo del inventario?")) {
+            inventario = inventario.filter(i => i.id != id);
+            await sincronizarConFirestore();
+            actualizarTablaInventario();
+        }
     }
 
     function actualizarTablaInventario() {
@@ -998,6 +1071,10 @@
                 <td>${i.desc}</td>
                 <td>${i.unidades}</td>
                 <td>${i.precio.toFixed(2)}€</td>
+                <td class="td-actions">
+                    <button class="btn-action" onclick="editarInventario(${i.id})" title="Editar">✏️</button>
+                    <button class="btn-action" onclick="eliminarInventario(${i.id})" title="Eliminar">❌</button>
+                </td>
             </tr>`;
             tbody.innerHTML += row;
         });
@@ -1050,17 +1127,17 @@
         });
     });
 
-    window.añadirFilaArticulo = function() {
+    window.añadirFilaArticulo = function(desc = '', cant = 1, precio = '') {
         const contenedor = document.getElementById('lista-articulos');
         const nuevaFila = document.createElement('div');
         nuevaFila.className = 'item-row';
         nuevaFila.innerHTML = `
             <div class="desc-container">
-                <input type="text" placeholder="Escribe para buscar por Artículo o Articulo/EAN..." class="art-desc" autocomplete="off" oninput="buscarArticuloRealtime(this)" required>
+                <input type="text" placeholder="Escribe para buscar por Artículo o Articulo/EAN..." class="art-desc" value="${desc}" autocomplete="off" oninput="buscarArticuloRealtime(this)" required>
                 <div class="search-dropdown" style="display:none;"></div>
             </div>
-            <input type="number" placeholder="Cant" class="art-cant" value="1" min="1" oninput="calcularTotales()" required>
-            <input type="number" placeholder="Precio (€)" class="art-precio" step="0.01" oninput="calcularTotales()" required>
+            <input type="number" placeholder="Cant" class="art-cant" value="${cant}" min="1" oninput="calcularTotales()" required>
+            <input type="number" placeholder="Precio (€)" class="art-precio" value="${precio}" step="0.01" oninput="calcularTotales()" required>
             <button type="button" class="btn" style="background-color: #e74c3c;" onclick="eliminarFila(this)">X</button>
         `;
         contenedor.appendChild(nuevaFila);
@@ -1095,11 +1172,12 @@
     }
 
     function generarSiguienteNumeroPresupuesto() {
+        if (document.getElementById('edit-pres-id').value) return; // Si estamos editando, no alteramos el número actual.
+
         if(presupuestos.length === 0) {
             document.getElementById('pres-numero').value = "PRE-001";
             return;
         }
-        // Buscar el número más alto
         const numeros = presupuestos.map(p => {
             const match = p.numero.match(/\d+/);
             return match ? parseInt(match[0], 10) : 0;
@@ -1109,8 +1187,9 @@
         document.getElementById('pres-numero').value = "PRE-" + String(siguiente).padStart(3, '0');
     }
 
-    // --- ACCIÓN DE GUARDAR / IMPRIMIR PRESUPUESTO ---
+    // --- ACCIÓN DE GUARDAR / MODIFICAR / IMPRIMIR PRESUPUESTO ---
     window.procesarPresupuesto = async function(lanzarImpresion) {
+        const idEdit = document.getElementById('edit-pres-id').value;
         const clienteId = document.getElementById('select-cliente-id').value;
         const numeroPres = document.getElementById('pres-numero').value;
         
@@ -1123,7 +1202,6 @@
             return;
         }
 
-        // Construir estructura de artículos
         const items = [];
         const filas = document.querySelectorAll('.item-row');
         let formValido = true;
@@ -1134,12 +1212,11 @@
             const precio = parseFloat(fila.querySelector('.art-precio').value) || 0;
 
             if(!desc || cant <= 0 || precio <= 0) formValido = false;
-
             items.push({ desc, cant, precio });
         });
 
         if(!formValido) {
-            alert("Por favor, rellena correctamente todos los campos de artículos con valores mayores a 0.");
+            alert("Por favor, rellena todos los artículos con valores válidos.");
             return;
         }
 
@@ -1147,36 +1224,45 @@
         const iva = parseFloat(document.getElementById('val-iva').innerText);
         const total = parseFloat(document.getElementById('val-total').innerText);
 
-        // Crear objeto de presupuesto estructurado
-        const nuevoPresupuesto = {
-            id: "PRES-" + Date.now(),
+        const objetoPresupuesto = {
             clienteId: parseInt(clienteId, 10),
             numero: numeroPres,
-            fecha: new Date().toLocaleDateString('es-ES'),
+            fecha: idEdit ? presupuestos.find(p => p.id === idEdit).fecha : new Date().toLocaleDateString('es-ES'),
             items: items,
             subtotal: subtotal,
             iva: iva,
             total: total
         };
 
-        // Guardar o actualizar en el array global
-        presupuestos.push(nuevoPresupuesto);
+        if(idEdit) {
+            objetoPresupuesto.id = idEdit;
+            const idx = presupuestos.findIndex(p => p.id === idEdit);
+            if(idx !== -1) {
+                presupuestos[idx] = objetoPresupuesto;
+            }
+            cancelarEdicionPresupuesto();
+        } else {
+            objetoPresupuesto.id = "PRES-" + Date.now();
+            presupuestos.push(objetoPresupuesto);
+        }
+
         await sincronizarConFirestore();
+        mostrarToast();
 
-        // Generar la UI de vista previa para impresión
-        inyectarVistaPreviaImpresion(nuevoPresupuesto);
-
-        alert('Presupuesto guardado con éxito en la nube.');
-
-        // Resetear pestaña de presupuesto y actualizar tablas
+        inyectarVistaPreviaImpresion(objetoPresupuesto);
         actualizarTablaClientes();
-        limpiarFormularioPresupuesto();
-        generarSiguienteNumeroPresupuesto();
 
         if (lanzarImpresion) {
-            // Mostrar la vista previa en pantalla por si acaso y lanzar impresión nativa
             document.getElementById('vista-previa').style.display = 'block';
-            setTimeout(() => { window.print(); }, 300);
+            // Dejamos un delay sutil antes de limpiar el formulario para permitir que el proceso de spooling de impresión capture el DOM
+            setTimeout(() => { 
+                window.print(); 
+                limpiarFormularioPresupuesto();
+                generarSiguienteNumeroPresupuesto();
+            }, 350);
+        } else {
+            limpiarFormularioPresupuesto();
+            generarSiguienteNumeroPresupuesto();
         }
     }
 
@@ -1185,7 +1271,6 @@
         document.getElementById('select-cliente-id').value = "";
         document.getElementById('cliente-seleccionado-info').innerText = "";
         
-        // Dejar solo una fila de artículo limpia
         const contenedor = document.getElementById('lista-articulos');
         contenedor.innerHTML = `
             <div class="item-row">
@@ -1201,6 +1286,58 @@
         document.getElementById('val-subtotal').innerText = "0.00";
         document.getElementById('val-iva').innerText = "0.00";
         document.getElementById('val-total').innerText = "0.00";
+    }
+
+    // --- MODIFICAR Y ELIMINAR PRESUPUESTOS ---
+    window.cargarEditarPresupuesto = function(presId, event) {
+        event.stopPropagation();
+        const pres = presupuestos.find(p => p.id === presId);
+        if(!pres) return;
+
+        const cliente = clientes.find(c => c.id == pres.clienteId);
+
+        document.getElementById('edit-pres-id').value = pres.id;
+        document.getElementById('pres-numero').value = pres.numero;
+        document.getElementById('select-cliente-id').value = pres.clienteId;
+        if(cliente) {
+            document.getElementById('search-cliente').value = cliente.nombre;
+            document.getElementById('cliente-seleccionado-info').innerText = `✓ Cliente: ${cliente.nombre} seleccionado.`;
+        }
+
+        const contenedor = document.getElementById('lista-articulos');
+        contenedor.innerHTML = ''; // Vaciar
+        pres.items.forEach(item => {
+            añadirFilaArticulo(item.desc, item.cant, item.precio);
+        });
+
+        calcularTotales();
+
+        document.getElementById('titulo-form-presupuesto').innerText = "Modificar Presupuesto (" + pres.numero + ")";
+        document.getElementById('btn-submit-p1').innerText = "Guardar Cambios";
+        document.getElementById('btn-submit-p2').innerText = "Guardar e Imprimir Cambios";
+        document.getElementById('btn-cancelar-presupuesto-edit').style.display = "inline-block";
+
+        switchTab('tab-presupuestos');
+    }
+
+    window.cancelarEdicionPresupuesto = function() {
+        document.getElementById('edit-pres-id').value = "";
+        document.getElementById('titulo-form-presupuesto').innerText = "Generar Presupuesto";
+        document.getElementById('btn-submit-p1').innerText = "Guardar Presupuesto";
+        document.getElementById('btn-submit-p2').innerText = "Guardar e Imprimir Presupuesto";
+        document.getElementById('btn-cancelar-presupuesto-edit').style.display = "none";
+        limpiarFormularioPresupuesto();
+        generarSiguienteNumeroPresupuesto();
+    }
+
+    window.eliminarPresupuesto = async function(presId, event) {
+        event.stopPropagation();
+        if(confirm("¿Estás seguro de que deseas eliminar permanentemente este presupuesto?")) {
+            presupuestos = presupuestos.filter(p => p.id !== presId);
+            await sincronizarConFirestore();
+            actualizarTablaClientes();
+            generarSiguienteNumeroPresupuesto();
+        }
     }
 
     function inyectarVistaPreviaImpresion(pres) {
@@ -1253,14 +1390,13 @@
         document.getElementById('print-notes').innerText = miEmpresa.notes || 'Sin observaciones.';
     }
 
-    // --- RE-IMPRIMIR DESDE PESTAÑA CLIENTES ---
-    window.reImprimirPresupuesto = function(presId) {
+    window.reImprimirPresupuesto = function(presId, event) {
+        if(event) event.stopPropagation();
         const pres = presupuestos.find(p => p.id === presId);
         if(!pres) return;
 
         inyectarVistaPreviaImpresion(pres);
         
-        // Hacer scroll y mostrar el layout de impresión abajo
         const vistaPrevia = document.getElementById('vista-previa');
         vistaPrevia.style.display = 'block';
         vistaPrevia.scrollIntoView({ behavior: 'smooth' });
