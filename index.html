@@ -28,6 +28,7 @@
             padding: 20px;
         }
 
+        /* Contenedores Principales */
         .login-container {
             display: flex;
             flex-direction: column;
@@ -69,11 +70,7 @@
             box-shadow: 0 1px 3px rgba(60,64,67,0.3);
         }
 
-        .btn-google svg {
-            width: 18px;
-            height: 18px;
-            display: block;
-        }
+        .btn-google svg { width: 18px; height: 18px; display: block; }
 
         .container {
             max-width: 1100px;
@@ -94,9 +91,7 @@
             padding-right: 120px;
         }
 
-        h1 {
-            color: var(--primary-color);
-        }
+        h1 { color: var(--primary-color); }
 
         .top-actions {
             position: absolute;
@@ -115,9 +110,7 @@
             cursor: pointer;
             transition: transform 0.3s ease;
         }
-        .btn-config-top:hover {
-            transform: rotate(45deg);
-        }
+        .btn-config-top:hover { transform: rotate(45deg); }
 
         .btn-logout {
             background-color: #e74c3c;
@@ -130,6 +123,7 @@
             font-weight: bold;
         }
 
+        /* Sistema de Pestañas */
         .tabs {
             display: flex;
             justify-content: center;
@@ -153,14 +147,10 @@
             color: white;
         }
 
-        .tab-content {
-            display: none;
-        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
-        .tab-content.active {
-            display: block;
-        }
-
+        /* Formularios e Inputs */
         .grid-form {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -172,10 +162,6 @@
             display: flex;
             flex-direction: column;
             position: relative;
-        }
-
-        .form-group.full-width {
-            grid-column: 1 / -1;
         }
 
         label {
@@ -208,10 +194,9 @@
             transition: background 0.2s;
         }
 
-        button.btn:hover {
-            background-color: #128f76;
-        }
+        button.btn:hover { background-color: #128f76; }
 
+        /* Tablas */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -225,42 +210,29 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        th {
-            background-color: var(--primary-color);
-            color: white;
-        }
+        th { background-color: var(--primary-color); color: white; }
 
-        .fila-cliente {
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .fila-cliente:hover {
-            background-color: #f1f2f6;
-        }
-        .td-actions {
-            white-space: nowrap;
-            text-align: right;
-        }
-        .btn-action {
-            background: none;
-            border: none;
-            font-size: 1.1rem;
-            cursor: pointer;
-            margin-left: 8px;
-        }
+        .fila-cliente { cursor: pointer; transition: background 0.2s; }
+        .fila-cliente:hover { background-color: #f1f2f6; }
+        
+        .td-actions { white-space: nowrap; text-align: right; }
+        .btn-action { background: none; border: none; font-size: 1.1rem; cursor: pointer; margin-left: 8px; }
+
         .presupuestos-desplegables-container {
             background-color: #f9f9f9;
             padding: 15px;
             border-bottom: 2px solid var(--border-color);
         }
+
         .presupuesto-item-list {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px var(--secondary-color);
+            padding: 8px 0;
             border-bottom: 1px dashed #ccc;
         }
 
+        /* Buscadores predictivos */
         .search-dropdown {
             position: absolute;
             top: 100%;
@@ -275,17 +247,10 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        .search-item {
-            padding: 10px;
-            cursor: pointer;
-            border-bottom: 1px solid #f1f1f1;
-        }
+        .search-item { padding: 10px; cursor: pointer; border-bottom: 1px solid #f1f1f1; }
+        .search-item:hover { background-color: #f8f9fa; color: var(--secondary-color); }
 
-        .search-item:hover {
-            background-color: #f8f9fa;
-            color: var(--secondary-color);
-        }
-
+        /* Filas dinámicas del presupuesto */
         .items-contenedor {
             border: 1px solid var(--border-color);
             padding: 15px;
@@ -294,63 +259,16 @@
             background: #fbfbfb;
         }
 
-        .item-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            position: relative;
-        }
-
+        .item-row { display: flex; gap: 10px; margin-bottom: 10px; position: relative; }
         .item-row .desc-container { flex: 3; position: relative; display: flex; flex-direction: column; }
         .item-row input.art-cant { flex: 0.8; }
         .item-row input.art-precio { flex: 1; }
 
-        .totales-presupuesto {
-            text-align: right;
-            margin-top: 20px;
-            font-size: 1.1rem;
-        }
+        .totales-presupuesto { text-align: right; margin-top: 20px; font-size: 1.1rem; }
+        .logo-preview { max-width: 150px; max-height: 80px; margin-top: 10px; border: 1px dashed var(--border-color); padding: 5px; display: none; }
+        .btn-group-guardar { display: flex; gap: 15px; margin-top: 20px; }
 
-        .logo-preview {
-            max-width: 150px;
-            max-height: 80px;
-            margin-top: 10px;
-            border: 1px dashed var(--border-color);
-            padding: 5px;
-            display: none;
-        }
-
-        .preview-presupuesto {
-            border: 1px solid #aaa;
-            padding: 40px;
-            margin-top: 30px;
-            background: white;
-            display: none;
-        }
-
-        .preview-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #333;
-            padding-bottom: 20px;
-            align-items: center;
-        }
-
-        .print-logo {
-            max-width: 200px;
-            max-height: 90px;
-            object-fit: contain;
-            display: none;
-        }
-
-        .btn-group-guardar {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        /* Toast / Alerta flotante temporal */
+        /* Notificación Toast */
         .toast-alerta {
             position: fixed;
             bottom: 20px;
@@ -371,11 +289,30 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* --- DISEÑO EXCLUSIVO PARA IMPRESIÓN --- */
+        #bloque-impresion-final {
+            display: none; /* Oculto completamente en pantalla normal */
+            background: white;
+            color: #000;
+        }
+
         @media print {
-            body * { visibility: hidden; }
-            .preview-presupuesto, .preview-presupuesto * { visibility: visible; }
-            .preview-presupuesto { position: absolute; left: 0; top: 0; width: 100%; border: none; padding: 0; display: block !important; }
-            .no-print { display: none !important; }
+            /* Ocultamos absolutamente toda la interfaz web */
+            body { background: white; padding: 0; margin: 0; }
+            #login-screen, #app-container, .toast-alerta, .no-print { 
+                display: none !important; 
+            }
+            /* Mostramos única y exclusivamente el bloque de impresión limpio */
+            #bloque-impresion-final {
+                display: block !important;
+                width: 100% !important;
+                position: absolute;
+                left: 0;
+                top: 0;
+                padding: 20px;
+            }
+            table { page-break-inside: auto; }
+            tr { page-break-inside: avoid; page-break-after: auto; }
         }
     </style>
 </head>
@@ -383,13 +320,12 @@
 
 <div id="toast" class="toast-alerta">✓ ¡Guardado correctamente en la nube!</div>
 
-<div id="login-screen" class="login-container no-print">
+<div id="login-screen" class="login-container">
     <div class="login-card">
         <h2 style="color: var(--primary-color); margin-bottom: 10px;">Presupuestos Cloud</h2>
-        <p style="color: #666; font-size: 0.9rem;">Accede con tu cuenta de Google de forma segura para gestionar tus presupuestos.</p>
-        
+        <p style="color: #666; font-size: 0.9rem;">Accede de forma segura para gestionar tus presupuestos profesionales.</p>
         <button class="btn-google" onclick="loginConGoogle()">
-            <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
+            <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
                 <path fill="#4285F4" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"></path>
             </svg>
             Iniciar sesión con Google
@@ -398,7 +334,7 @@
 </div>
 
 <div id="app-container" class="container">
-    <header class="no-print">
+    <header>
         <h1>Sistema de Gestión de Presupuestos</h1>
         <div class="top-actions">
             <button class="btn-config-top" onclick="switchTab('tab-configuracion')" title="Configuración de Empresa">⚙️</button>
@@ -406,7 +342,7 @@
         </div>
     </header>
 
-    <div class="tabs no-print" id="main-tabs">
+    <div class="tabs" id="main-tabs">
         <button class="tab-btn active" id="btn-tab-presupuestos" onclick="switchTab('tab-presupuestos')">Crear Presupuesto</button>
         <button class="tab-btn" id="btn-tab-clientes" onclick="switchTab('tab-clientes')">Clientes</button>
         <button class="tab-btn" id="btn-tab-inventario" onclick="switchTab('tab-inventario')">Inventario</button>
@@ -416,49 +352,23 @@
         <h2>Datos de mi Empresa / Autónomo</h2>
         <form id="form-config">
             <div class="grid-form">
+                <div class="form-group"><label>CIF / NIF / DNI</label><input type="text" id="emp-cif" required></div>
+                <div class="form-group"><label>Nombre Comercial</label><input type="text" id="emp-nombre" required></div>
+                <div class="form-group"><label>Dirección</label><input type="text" id="emp-direccion" required></div>
+                <div class="form-group"><label>Código Postal</label><input type="text" id="emp-cp" required></div>
+                <div class="form-group"><label>Población / Ciudad</label><input type="text" id="emp-poblacion" required></div>
+                <div class="form-group"><label>Teléfono</label><input type="tel" id="emp-telefono" required></div>
+                <div class="form-group"><label>Email</label><input type="email" id="emp-email" required></div>
                 <div class="form-group">
-                    <label>CIF / NIF / DNI</label>
-                    <input type="text" id="emp-cif" required>
-                </div>
-                <div class="form-group">
-                    <label>Nombre Comercial / Completo</label>
-                    <input type="text" id="emp-nombre" required>
-                </div>
-                <div class="form-group">
-                    <label>Dirección</label>
-                    <input type="text" id="emp-direccion" required>
-                </div>
-                <div class="form-group">
-                    <label>Código Postal</label>
-                    <input type="text" id="emp-cp" required>
-                </div>
-                <div class="form-group">
-                    <label>Población / Ciudad</label>
-                    <input type="text" id="emp-poblacion" required>
-                </div>
-                <div class="form-group">
-                    <label>Teléfono</label>
-                    <input type="tel" id="emp-telefono" required>
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="emp-email" required>
-                </div>
-                <div class="form-group">
-                    <label>Logo de la Empresa</label>
+                    <label>Logo corporativo</label>
                     <input type="file" id="emp-logo-input" accept="image/*" onchange="procesarLogo(this)">
-                    <img id="emp-logo-preview" class="logo-preview" alt="Vista previa del logo">
+                    <img id="emp-logo-preview" class="logo-preview" alt="Logo corporativo preview">
                 </div>
             </div>
-
-            <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border-color);">
-            
-            <h2>Condiciones y Garantías (Notas del Presupuesto)</h2>
-            <div class="form-group full-width" style="margin-bottom: 20px;">
-                <label>Texto de notas legales, validez o exclusiones de garantía:</label>
-                <textarea id="emp-notas" rows="5" placeholder="Ej. La garantía de este producto es de 3 años..."></textarea>
+            <h2>Condiciones y Garantías</h2>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <textarea id="emp-notas" rows="4" placeholder="Ej. La validez de este presupuesto es de 30 días..."></textarea>
             </div>
-
             <button type="button" class="btn" onclick="guardarConfiguracion()">Guardar Configuración</button>
             <button type="button" class="btn" style="background-color: #7f8c8d;" onclick="switchTab('tab-presupuestos')">Volver</button>
         </form>
@@ -469,41 +379,19 @@
         <form id="form-cliente" onsubmit="guardarCliente(event)">
             <input type="hidden" id="edit-cli-id">
             <div class="grid-form">
-                <div class="form-group">
-                    <label>CIF / NIF</label>
-                    <input type="text" id="cli-cif" required>
-                </div>
-                <div class="form-group">
-                    <label>Nombre Completo</label>
-                    <input type="text" id="cli-nombre" required>
-                </div>
-                <div class="form-group">
-                    <label>Dirección</label>
-                    <input type="text" id="cli-direccion" required>
-                </div>
-                <div class="form-group">
-                    <label>Código Postal</label>
-                    <input type="text" id="cli-cp" required>
-                </div>
-                <div class="form-group">
-                    <label>Población / Ciudad</label>
-                    <input type="text" id="cli-poblacion" required>
-                </div>
-                <div class="form-group">
-                    <label>Teléfono</label>
-                    <input type="tel" id="cli-telefono" required>
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="cli-email" required>
-                </div>
+                <div class="form-group"><label>CIF / NIF</label><input type="text" id="cli-cif" required></div>
+                <div class="form-group"><label>Nombre Completo</label><input type="text" id="cli-nombre" required></div>
+                <div class="form-group"><label>Dirección</label><input type="text" id="cli-direccion" required></div>
+                <div class="form-group"><label>Código Postal</label><input type="text" id="cli-cp" required></div>
+                <div class="form-group"><label>Población / Ciudad</label><input type="text" id="cli-poblacion" required></div>
+                <div class="form-group"><label>Teléfono</label><input type="tel" id="cli-telefono" required></div>
+                <div class="form-group"><label>Email</label><input type="email" id="cli-email" required></div>
             </div>
             <button type="submit" class="btn" id="btn-guardar-cliente">Guardar Cliente</button>
             <button type="button" class="btn" id="btn-cancelar-cliente-edit" style="background-color:#7f8c8d; display:none;" onclick="cancelarEdicionCliente()">Cancelar Edición</button>
         </form>
 
-        <h3 style="margin-top: 30px;">Listado de Clientes Existentes</h3>
-        <p style="font-size:0.85rem; color:#666;">* Haz clic en la fila de un cliente para ver, modificar, borrar o imprimir sus presupuestos asociados.</p>
+        <h3 style="margin-top:30px;">Listado de Clientes</h3>
         <table>
             <thead>
                 <tr>
@@ -523,28 +411,16 @@
         <form id="form-inventario" onsubmit="guardarInventario(event)">
             <input type="hidden" id="edit-inv-id">
             <div class="grid-form">
-                <div class="form-group">
-                    <label>Código Articulo/EAN</label>
-                    <input type="text" id="inv-ean" placeholder="Ej. 8410000000000" required>
-                </div>
-                <div class="form-group">
-                    <label>Descripción del Artículo</label>
-                    <input type="text" id="inv-desc" placeholder="Ej. Martillo de acero" required>
-                </div>
-                <div class="form-group">
-                    <label>Unidades</label>
-                    <input type="text" id="inv-unidades" value="Infinito" placeholder="Ej. 50 o Infinito" required>
-                </div>
-                <div class="form-group">
-                    <label>Precio de Venta (€)</label>
-                    <input type="number" id="inv-precio" step="0.01" placeholder="0.00" required>
-                </div>
+                <div class="form-group"><label>Código Articulo/EAN</label><input type="text" id="inv-ean" required></div>
+                <div class="form-group"><label>Descripción</label><input type="text" id="inv-desc" required></div>
+                <div class="form-group"><label>Unidades</label><input type="text" id="inv-unidades" value="Infinito" required></div>
+                <div class="form-group"><label>Precio de Venta (€)</label><input type="number" id="inv-precio" step="0.01" required></div>
             </div>
             <button type="submit" class="btn" id="btn-guardar-inventario">Guardar en Inventario</button>
             <button type="button" class="btn" id="btn-cancelar-inventario-edit" style="background-color:#7f8c8d; display:none;" onclick="cancelarEdicionInventario()">Cancelar Edición</button>
         </form>
 
-        <h3 style="margin-top: 30px;">Inventario Disponible</h3>
+        <h3 style="margin-top:30px;">Inventario Disponible</h3>
         <table>
             <thead>
                 <tr>
@@ -564,15 +440,15 @@
         <input type="hidden" id="edit-pres-id">
         <div class="grid-form">
             <div class="form-group">
-                <label>Buscar / Seleccionar Cliente</label>
-                <input type="text" id="search-cliente" placeholder="Escribe nombre o CIF del cliente..." autocomplete="off">
+                <label>Seleccionar Cliente</label>
+                <input type="text" id="search-cliente" placeholder="Escribe nombre o CIF..." autocomplete="off">
                 <input type="hidden" id="select-cliente-id">
                 <div id="cliente-results" class="search-dropdown" style="display:none;"></div>
                 <div id="cliente-seleccionado-info" style="margin-top:5px; font-size:0.85rem; color:var(--secondary-color); font-weight:bold;"></div>
             </div>
             <div class="form-group">
                 <label>Número de Presupuesto</label>
-                <input type="text" id="pres-numero" value="PRE-001" readonly style="background-color: #e9ecef; cursor: not-allowed;">
+                <input type="text" id="pres-numero" value="PRE-001" readonly style="background-color:#e9ecef; cursor:not-allowed;">
             </div>
         </div>
 
@@ -581,74 +457,72 @@
             <div id="lista-articulos">
                 <div class="item-row">
                     <div class="desc-container">
-                        <input type="text" placeholder="Escribe para buscar por Artículo o Articulo/EAN..." class="art-desc" autocomplete="off" oninput="buscarArticuloRealtime(this)" required>
+                        <input type="text" placeholder="Buscar por Descripción o Articulo/EAN..." class="art-desc" autocomplete="off" oninput="buscarArticuloRealtime(this)" required>
                         <div class="search-dropdown" style="display:none;"></div>
                     </div>
                     <input type="number" placeholder="Cant" class="art-cant" value="1" min="1" oninput="calcularTotales()" required>
                     <input type="number" placeholder="Precio (€)" class="art-precio" step="0.01" oninput="calcularTotales()" required>
-                    <button type="button" class="btn" style="background-color: #e74c3c;" onclick="eliminarFila(this)">X</button>
+                    <button type="button" class="btn" style="background-color:#e74c3c;" onclick="eliminarFila(this)">X</button>
                 </div>
             </div>
-            <button type="button" class="btn" style="background-color: #34495e; margin-top: 10px;" onclick="añadirFilaArticulo()">+ Añadir Artículo</button>
+            <button type="button" class="btn" style="background-color:#34495e; margin-top:10px;" onclick="añadirFilaArticulo()">+ Añadir Artículo</button>
         </div>
 
         <div class="totales-presupuesto">
             <p><strong>Subtotal:</strong> <span id="val-subtotal">0.00</span>€</p>
             <p><strong>IVA (21%):</strong> <span id="val-iva">0.00</span>€</p>
-            <p style="font-size: 1.4rem; color: var(--primary-color);"><strong>Total Presupuesto:</strong> <span id="val-total">0.00</span>€</p>
+            <p style="font-size:1.4rem; color:var(--primary-color);"><strong>Total Presupuesto:</strong> <span id="val-total">0.00</span>€</p>
         </div>
 
         <div class="btn-group-guardar">
-            <button type="button" id="btn-submit-p1" class="btn" style="background-color: #2980b9; flex: 1;" onclick="procesarPresupuesto(false)">Guardar Presupuesto</button>
-            <button type="button" id="btn-submit-p2" class="btn" style="flex: 1;" onclick="procesarPresupuesto(true)">Guardar e Imprimir Presupuesto</button>
+            <button type="button" id="btn-submit-p1" class="btn" style="background-color:#2980b9; flex:1;" onclick="procesarPresupuesto(false)">Guardar Presupuesto</button>
+            <button type="button" id="btn-submit-p2" class="btn" style="flex:1;" onclick="procesarPresupuesto(true)">Guardar e Imprimir Presupuesto</button>
             <button type="button" id="btn-cancelar-presupuesto-edit" class="btn" style="background-color:#7f8c8d; display:none;" onclick="cancelarEdicionPresupuesto()">Cancelar Modificación</button>
-        </div>
-
-        <div id="vista-previa" class="preview-presupuesto">
-            <div class="preview-header">
-                <div id="print-logo-container">
-                    <img id="print-logo" class="print-logo" src="" alt="Logo Empresa">
-                </div>
-                <div id="print-datos-empresa"></div>
-                <div style="text-align: right;">
-                    <h2 style="color: var(--primary-color);">PRESUPUESTO</h2>
-                    <p><strong>Número:</strong> <span id="print-num-pres"></span></p>
-                    <p><strong>Fecha:</strong> <span id="print-fecha"></span></p>
-                </div>
-            </div>
-
-            <div style="margin-bottom: 30px; background: #eee; padding: 15px; border-radius: 4px;">
-                <h4>DATOS DEL CLIENTE:</h4>
-                <div id="print-datos-cliente"></div>
-            </div>
-
-            <table id="print-tabla-articulos">
-                <thead>
-                    <tr>
-                        <th>Descripción</th>
-                        <th style="text-align: center; width: 80px;">Cant.</th>
-                        <th style="text-align: right; width: 120px;">P. Unitario</th>
-                        <th style="text-align: right; width: 150px;">Total</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-
-            <div style="text-align: right; margin-bottom: 40px;">
-                <p>Subtotal: <span id="print-subtotal"></span>€</p>
-                <p>IVA (21%): <span id="print-iva"></span>€</p>
-                <h3>TOTAL: <span id="print-total"></span>€</h3>
-            </div>
-
-            <div style="border-top: 1px solid #777; padding-top: 15px; font-size: 0.85rem; color: #555;">
-                <h4>Condiciones y Garantías:</h4>
-                <p id="print-notas" style="white-space: pre-line;"></p>
-            </div>
-            
-            <button class="btn no-print" style="margin-top:20px; background-color:#2980b9;" onclick="window.print()">Lanzar Impresión / Guardar PDF</button>
         </div>
     </div>
 </div>
+
+
+<div id="bloque-impresion-final">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #333; padding-bottom:20px; margin-bottom:30px;">
+        <div><img id="print-logo" style="max-width:200px; max-height:90px; object-fit:contain; display:none;" src="" alt="Logo"></div>
+        <div id="print-datos-empresa" style="font-size:0.9rem; line-height:1.4;"></div>
+        <div style="text-align:right;">
+            <h2 style="color:#2c3e50; margin-bottom:5px;">PRESUPUESTO</h2>
+            <p><strong>Número:</strong> <span id="print-num-pres"></span></p>
+            <p><strong>Fecha:</strong> <span id="print-fecha"></span></p>
+        </div>
+    </div>
+
+    <div style="margin-bottom:30px; background:#f5f6fa; padding:15px; border-radius:4px; border:1px solid #ddd;">
+        <h4 style="margin-bottom:5px; color:#2c3e50;">DATOS DEL CLIENTE:</h4>
+        <div id="print-datos-cliente" style="font-size:0.95rem; line-height:1.5;"></div>
+    </div>
+
+    <table style="width:100%; border-collapse:collapse; margin-top:20px; margin-bottom:30px;">
+        <thead>
+            <tr style="background-color:#2c3e50; color:white;">
+                <th style="padding:10px; border:1px solid #ddd;">Descripción del Concepto</th>
+                <th style="padding:10px; border:1px solid #ddd; text-align:center; width:80px;">Cant.</th>
+                <th style="padding:10px; border:1px solid #ddd; text-align:right; width:120px;">P. Unitario</th>
+                <th style="padding:10px; border:1px solid #ddd; text-align:right; width:140px;">Total</th>
+            </tr>
+        </thead>
+        <tbody id="print-tabla-articulos-cuerpo"></tbody>
+    </table>
+
+    <div style="text-align:right; margin-bottom:40px; font-size:1.05rem; line-height:1.6;">
+        <p>Subtotal: <span id="print-subtotal"></span>€</p>
+        <p>IVA (21%): <span id="print-iva"></span>€</p>
+        <h3 style="font-size:1.5rem; color:#2c3e50; margin-top:5px;">TOTAL: <span id="print-total"></span>€</h3>
+    </div>
+
+    <div style="border-top:1px solid #aaa; padding-top:15px; font-size:0.85rem; color:#555;">
+        <h4 style="color:#333; margin-bottom:5px;">Condiciones y Garantías:</h4>
+        <p id="print-notas" style="white-space:pre-line;"></p>
+    </div>
+</div>
+
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
@@ -677,6 +551,7 @@
     let miEmpresa = {};
     let clienteDesplegadoId = null;
 
+    // --- ESCUCHADOR AUTENTICACIÓN ---
     onAuthStateChanged(auth, (user) => {
         if (user) {
             usuarioActual = user;
@@ -691,35 +566,25 @@
     });
 
     window.loginConGoogle = function() {
-        signInWithPopup(auth, provider).catch(error => alert("Error al autenticar con Google: " + error.message));
+        signInWithPopup(auth, provider).catch(err => alert("Error en Login: " + err.message));
     }
 
     window.logout = function() {
         signOut(auth).then(() => {
-            limpiarFormulariosAlSalir();
+            document.getElementById('form-config').reset();
+            document.getElementById('form-cliente').reset();
+            document.getElementById('form-inventario').reset();
+            document.getElementById('emp-logo-preview').style.display = 'none';
+            document.getElementById('cliente-seleccionado-info').innerText = '';
+            clientes = []; inventario = []; presupuestos = []; miEmpresa = {}; clienteDesplegadoId = null;
         });
     }
 
-    function limpiarFormulariosAlSalir() {
-        document.getElementById('form-config').reset();
-        document.getElementById('form-cliente').reset();
-        document.getElementById('form-inventario').reset();
-        document.getElementById('emp-logo-preview').style.display = 'none';
-        document.getElementById('cliente-seleccionado-info').innerText = '';
-        document.getElementById('vista-previa').style.display = 'none';
-        clientes = [];
-        inventario = [];
-        presupuestos = [];
-        miEmpresa = {};
-        clienteDesplegadoId = null;
-    }
-
+    // --- FIRESTORE PERSISTENCIA ---
     async function cargarDatosDesdeFirestore() {
         if (!usuarioActual) return;
         try {
-            const userDocRef = doc(db, "users", usuarioActual.uid);
-            const docSnap = await getDoc(userDocRef);
-
+            const docSnap = await getDoc(doc(db, "users", usuarioActual.uid));
             if (docSnap.exists()) {
                 const data = docSnap.data();
                 clientes = data.clientes || [];
@@ -732,38 +597,28 @@
                 actualizarTablaInventario();
                 generarSiguienteNumeroPresupuesto();
             }
-        } catch (error) {
-            console.error("Error al leer desde Firestore: ", error);
-        }
+        } catch (error) { console.error("Error reading Firestore:", error); }
     }
 
     async function sincronizarConFirestore() {
         if (!usuarioActual) return;
         try {
-            const userDocRef = doc(db, "users", usuarioActual.uid);
-            await setDoc(userDocRef, {
-                clientes: clientes,
-                inventario: inventario,
-                presupuestos: presupuestos,
-                miEmpresa: miEmpresa
+            await setDoc(doc(db, "users", usuarioActual.uid), {
+                clientes, inventario, presupuestos, miEmpresa
             }, { merge: true }); 
-        } catch (error) {
-            console.error("Error al escribir en Firestore: ", error);
-        }
+        } catch (error) { console.error("Error writing Firestore:", error); }
     }
 
     function mostrarToast() {
         const toast = document.getElementById('toast');
         toast.style.display = 'block';
-        setTimeout(() => {
-            toast.style.display = 'none';
-        }, 2500);
+        setTimeout(() => { toast.style.display = 'none'; }, 2500);
     }
 
+    // --- MANEJO DE VISTAS ---
     window.switchTab = function(tabId) {
         document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        
         document.getElementById(tabId).classList.add('active');
         
         const mainTabs = document.getElementById('main-tabs');
@@ -773,16 +628,14 @@
             const activeBtn = document.getElementById('btn-' + tabId);
             if(activeBtn) activeBtn.classList.add('active');
         }
-        document.getElementById('vista-previa').style.display = 'none';
     }
 
     window.procesarLogo = function(input) {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                const preview = document.getElementById('emp-logo-preview');
-                preview.src = e.target.result;
-                preview.style.display = 'block';
+                document.getElementById('emp-logo-preview').src = e.target.result;
+                document.getElementById('emp-logo-preview').style.display = 'block';
                 miEmpresa.logo = e.target.result; 
             };
             reader.readAsDataURL(input.files[0]);
@@ -798,7 +651,6 @@
         miEmpresa.telefono = document.getElementById('emp-telefono').value;
         miEmpresa.email = document.getElementById('emp-email').value;
         miEmpresa.notes = document.getElementById('emp-notas').value;
-
         await sincronizarConFirestore();
         mostrarToast();
         switchTab('tab-presupuestos');
@@ -814,12 +666,9 @@
             document.getElementById('emp-telefono').value = miEmpresa.telefono;
             document.getElementById('emp-email').value = miEmpresa.email;
             document.getElementById('emp-notas').value = miEmpresa.notes || '';
-            const preview = document.getElementById('emp-logo-preview');
             if (miEmpresa.logo) {
-                preview.src = miEmpresa.logo;
-                preview.style.display = 'block';
-            } else {
-                preview.style.display = 'none';
+                document.getElementById('emp-logo-preview').src = miEmpresa.logo;
+                document.getElementById('emp-logo-preview').style.display = 'block';
             }
         }
     }
@@ -828,8 +677,7 @@
     window.guardarCliente = async function(e) {
         e.preventDefault();
         const idEdit = document.getElementById('edit-cli-id').value;
-        
-        const datosCliente = {
+        const datos = {
             cif: document.getElementById('cli-cif').value,
             nombre: document.getElementById('cli-nombre').value,
             direccion: document.getElementById('cli-direccion').value,
@@ -841,16 +689,13 @@
 
         if (idEdit) {
             const index = clientes.findIndex(c => c.id == idEdit);
-            if(index !== -1) {
-                clientes[index] = { ...clientes[index], ...datosCliente };
-            }
+            if(index !== -1) clientes[index] = { ...clientes[index], ...datos };
             cancelarEdicionCliente();
         } else {
-            datosCliente.id = Date.now();
-            clientes.push(datosCliente);
+            datos.id = Date.now();
+            clientes.push(datos);
             document.getElementById('form-cliente').reset();
         }
-
         await sincronizarConFirestore();
         mostrarToast();
         actualizarTablaClientes();
@@ -860,7 +705,6 @@
         event.stopPropagation(); 
         const c = clientes.find(cli => cli.id == id);
         if(!c) return;
-
         document.getElementById('edit-cli-id').value = c.id;
         document.getElementById('cli-cif').value = c.cif;
         document.getElementById('cli-nombre').value = c.nombre;
@@ -869,7 +713,6 @@
         document.getElementById('cli-poblacion').value = c.poblacion;
         document.getElementById('cli-telefono').value = c.telefono;
         document.getElementById('cli-email').value = c.email;
-
         document.getElementById('titulo-form-cliente').innerText = "Editar Cliente: " + c.nombre;
         document.getElementById('btn-guardar-cliente').innerText = "Actualizar Cliente";
         document.getElementById('btn-cancelar-cliente-edit').style.display = "inline-block";
@@ -886,28 +729,22 @@
 
     window.eliminarCliente = async function(id, event) {
         event.stopPropagation();
-        if(confirm("¿Estás seguro de eliminar este cliente? Se borrarán sus presupuestos asociados.")) {
+        if(confirm("¿Estás seguro de eliminar este cliente y todos sus presupuestos?")) {
             clientes = clientes.filter(c => c.id != id);
             presupuestos = presupuestos.filter(p => p.clienteId != id);
-            
             await sincronizarConFirestore();
             actualizarTablaClientes();
         }
     }
 
     window.toggleDesplegarPresupuestos = function(clienteId) {
-        if(clienteDesplegadoId === clienteId) {
-            clienteDesplegadoId = null;
-        } else {
-            clienteDesplegadoId = clienteId;
-        }
+        clienteDesplegadoId = (clienteDesplegadoId === clienteId) ? null : clienteId;
         actualizarTablaClientes();
     }
 
     function actualizarTablaClientes() {
         const tbody = document.getElementById('tabla-clientes-cuerpo');
         tbody.innerHTML = '';
-        
         clientes.forEach(c => {
             const row = document.createElement('tr');
             row.className = 'fila-cliente';
@@ -918,67 +755,49 @@
                 <td>${c.poblacion}</td>
                 <td>${c.telefono}</td>
                 <td class="td-actions">
-                    <button class="btn-action" onclick="editarCliente(${c.id}, event)" title="Editar">✏️</button>
-                    <button class="btn-action" onclick="eliminarCliente(${c.id}, event)" title="Eliminar">❌</button>
+                    <button class="btn-action" onclick="editarCliente(${c.id}, event)">✏️</button>
+                    <button class="btn-action" onclick="eliminarCliente(${c.id}, event)">❌</button>
                 </td>
             `;
             tbody.appendChild(row);
 
             if(clienteDesplegadoId === c.id) {
-                const presupuestosFiltrados = presupuestos.filter(p => p.clienteId == c.id);
+                const filtrados = presupuestos.filter(p => p.clienteId == c.id);
                 const subRow = document.createElement('tr');
-                subRow.className = 'no-print';
-                
-                let htmlPresupuestos = `<div class="presupuestos-desplegables-container">`;
-                if(presupuestosFiltrados.length > 0) {
-                    htmlPresupuestos += `<h4>Presupuestos asociados:</h4>`;
-                    presupuestosFiltrados.forEach(p => {
-                        htmlPresupuestos += `
+                let html = `<div class="presupuestos-desplegables-container">`;
+                if(filtrados.length > 0) {
+                    html += `<h4>Presupuestos asociados:</h4>`;
+                    filtrados.forEach(p => {
+                        html += `
                             <div class="presupuesto-item-list">
                                 <span><strong>${p.numero}</strong> - ${p.fecha} (${p.total.toFixed(2)}€)</span>
                                 <div>
-                                    <button class="btn" style="padding: 4px 10px; font-size:0.8rem; background-color: var(--primary-color);" onclick="reImprimirPresupuesto('${p.id}', event)">🖨️ Imprimir</button>
-                                    <button class="btn" style="padding: 4px 10px; font-size:0.8rem; background-color: #f39c12;" onclick="cargarEditarPresupuesto('${p.id}', event)">✏️ Modificar</button>
-                                    <button class="btn" style="padding: 4px 10px; font-size:0.8rem; background-color: #e74c3c;" onclick="eliminarPresupuesto('${p.id}', event)">❌ Borrar</button>
+                                    <button class="btn" style="padding:4px 10px; font-size:0.8rem; background-color:var(--primary-color);" onclick="reImprimirPresupuesto('${p.id}', event)">🖨️ Imprimir</button>
+                                    <button class="btn" style="padding:4px 10px; font-size:0.8rem; background-color:#f39c12;" onclick="cargarEditarPresupuesto('${p.id}', event)">✏️ Modificar</button>
+                                    <button class="btn" style="padding:4px 10px; font-size:0.8rem; background-color:#e74c3c;" onclick="eliminarPresupuesto('${p.id}', event)">❌ Borrar</button>
                                 </div>
-                            </div>
-                        `;
+                            </div>`;
                     });
-                } else {
-                    htmlPresupuestos += `<p style="color:#777; font-size:0.9rem;">Este cliente no tiene ningún presupuesto guardado todavía.</p>`;
-                }
-                htmlPresupuestos += `</div>`;
-
-                subRow.innerHTML = `<td colspan="5" style="padding:0;">${htmlPresupuestos}</td>`;
+                } else { html += `<p style="color:#777; font-size:0.9rem;">No hay presupuestos guardados aún.</p>`; }
+                html += `</div>`;
+                subRow.innerHTML = `<td colspan="5" style="padding:0;">${html}</td>`;
                 tbody.appendChild(subRow);
             }
         });
     }
 
-    // --- BUSCADOR CLIENTES EN PRESUPUESTO ---
-    const inputCliente = document.getElementById('search-cliente');
-    const resultsCliente = document.getElementById('cliente-results');
-    const infoCliente = document.getElementById('cliente-seleccionado-info');
-
+    // --- BUSCADOR REALTIME CLIENTES ---
     inputCliente.addEventListener('input', function() {
-        const value = this.value.toLowerCase().trim();
+        const val = this.value.toLowerCase().trim();
         resultsCliente.innerHTML = '';
-        
-        if(!value) {
-            resultsCliente.style.display = 'none';
-            return;
-        }
-
-        const filtrados = clientes.filter(c => 
-            c.nombre.toLowerCase().includes(value) || c.cif.toLowerCase().includes(value)
-        );
-
+        if(!val) { resultsCliente.style.display = 'none'; return; }
+        const filtrados = clientes.filter(c => c.nombre.toLowerCase().includes(val) || c.cif.toLowerCase().includes(val));
         if(filtrados.length > 0) {
             resultsCliente.style.display = 'block';
             filtrados.forEach(c => {
                 const div = document.createElement('div');
                 div.className = 'search-item';
-                div.innerHTML = `<strong>${c.nombre}</strong> <small style="color:#777;">(${c.cif})</small>`;
+                div.innerHTML = `<strong>${c.nombre}</strong> <small>(${c.cif})</small>`;
                 div.onclick = function() {
                     inputCliente.value = c.nombre;
                     document.getElementById('select-cliente-id').value = c.id;
@@ -987,43 +806,33 @@
                 };
                 resultsCliente.appendChild(div);
             });
-        } else {
-            resultsCliente.style.display = 'none';
-        }
+        } else { resultsCliente.style.display = 'none'; }
     });
 
-    document.addEventListener('click', function(e) {
-        if(!inputCliente.contains(e.target) && !resultsCliente.contains(e.target)) {
-            resultsCliente.style.display = 'none';
-        }
-    });
+    document.addEventListener('click', e => { if(!inputCliente.contains(e.target)) resultsCliente.style.display = 'none'; });
 
-    // --- CRUD INVENTARIO (MODIFICAR Y BORRAR ARTÍCULOS) ---
+    // --- CRUD INVENTARIO ---
     window.guardarInventario = async function(e) {
         e.preventDefault();
         const idEdit = document.getElementById('edit-inv-id').value;
-        const unidadesInput = document.getElementById('inv-unidades').value.trim();
-        
-        const datosArticulo = {
+        const unids = document.getElementById('inv-unidades').value.trim();
+        const datos = {
             ean: document.getElementById('inv-ean').value,
             desc: document.getElementById('inv-desc').value,
-            unidades: unidadesInput === "" ? "Infinito" : unidadesInput,
+            unidades: unids === "" ? "Infinito" : unids,
             precio: parseFloat(document.getElementById('inv-precio').value)
         };
 
         if(idEdit) {
-            const index = inventario.findIndex(i => i.id == idEdit);
-            if(index !== -1) {
-                inventario[index] = { ...inventario[index], ...datosArticulo };
-            }
+            const idx = inventario.findIndex(i => i.id == idEdit);
+            if(idx !== -1) inventario[idx] = { ...inventario[idx], ...datos };
             cancelarEdicionInventario();
         } else {
-            datosArticulo.id = Date.now();
-            inventario.push(datosArticulo);
+            datos.id = Date.now();
+            inventario.push(datos);
             document.getElementById('form-inventario').reset();
             document.getElementById('inv-unidades').value = "Infinito";
         }
-
         await sincronizarConFirestore();
         mostrarToast();
         actualizarTablaInventario();
@@ -1032,13 +841,11 @@
     window.editarInventario = function(id) {
         const item = inventario.find(i => i.id == id);
         if(!item) return;
-
         document.getElementById('edit-inv-id').value = item.id;
         document.getElementById('inv-ean').value = item.ean;
         document.getElementById('inv-desc').value = item.desc;
         document.getElementById('inv-unidades').value = item.unidades;
         document.getElementById('inv-precio').value = item.precio;
-
         document.getElementById('titulo-form-inventario').innerText = "Modificar Artículo";
         document.getElementById('btn-guardar-inventario').innerText = "Actualizar Artículo";
         document.getElementById('btn-cancelar-inventario-edit').style.display = "inline-block";
@@ -1055,7 +862,7 @@
     }
 
     window.eliminarInventario = async function(id) {
-        if(confirm("¿Estás seguro de que deseas eliminar este artículo del inventario?")) {
+        if(confirm("¿Deseas borrar este artículo del inventario?")) {
             inventario = inventario.filter(i => i.id != id);
             await sincronizarConFirestore();
             actualizarTablaInventario();
@@ -1066,44 +873,35 @@
         const tbody = document.getElementById('tabla-inventario-cuerpo');
         tbody.innerHTML = '';
         inventario.forEach(i => {
-            const row = `<tr>
+            tbody.innerHTML += `<tr>
                 <td style="font-family:monospace;">${i.ean}</td>
                 <td>${i.desc}</td>
                 <td>${i.unidades}</td>
                 <td>${i.precio.toFixed(2)}€</td>
                 <td class="td-actions">
-                    <button class="btn-action" onclick="editarInventario(${i.id})" title="Editar">✏️</button>
-                    <button class="btn-action" onclick="eliminarInventario(${i.id})" title="Eliminar">❌</button>
+                    <button class="btn-action" onclick="editarInventario(${i.id})">✏️</button>
+                    <button class="btn-action" onclick="eliminarInventario(${i.id})">❌</button>
                 </td>
             </tr>`;
-            tbody.innerHTML += row;
         });
     }
 
-    // --- LÓGICA DE CREACIÓN DE PRESUPUESTOS ---
+    // --- LOGICA PRESUPUESTO DINÁMICO ---
     window.buscarArticuloRealtime = function(input) {
         const row = input.closest('.item-row');
         const dropdown = row.querySelector('.search-dropdown');
         const precioInput = row.querySelector('.art-precio');
-        const value = input.value.toLowerCase().trim();
-
+        const val = input.value.toLowerCase().trim();
         dropdown.innerHTML = '';
+        if(!val) { dropdown.style.display = 'none'; return; }
 
-        if(!value) {
-            dropdown.style.display = 'none';
-            return;
-        }
-
-        const filtrados = inventario.filter(i => 
-            i.desc.toLowerCase().includes(value) || i.ean.toLowerCase().includes(value)
-        );
-
+        const filtrados = inventario.filter(i => i.desc.toLowerCase().includes(val) || i.ean.toLowerCase().includes(val));
         if(filtrados.length > 0) {
             dropdown.style.display = 'block';
             filtrados.forEach(i => {
                 const div = document.createElement('div');
                 div.className = 'search-item';
-                div.innerHTML = `<small style="color:#2c3e50;font-family:monospace;margin-right:5px;">[${i.ean}]</small> <span>${i.desc}</span> <small style="color:#777;">(Stock: ${i.unidades})</small> - <strong>${i.precio.toFixed(2)}€</strong>`;
+                div.innerHTML = `<small>[${i.ean}]</small> <span>${i.desc}</span> <small style="color:#777;">(Stock: ${i.unidades})</small> - <strong>${i.precio.toFixed(2)}€</strong>`;
                 div.onclick = function() {
                     input.value = i.desc;
                     precioInput.value = i.precio;
@@ -1112,18 +910,14 @@
                 };
                 dropdown.appendChild(div);
             });
-        } else {
-            dropdown.style.display = 'none';
-        }
+        } else { dropdown.style.display = 'none'; }
     }
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', e => {
         document.querySelectorAll('.item-row').forEach(row => {
             const dropdown = row.querySelector('.search-dropdown');
             const input = row.querySelector('.art-desc');
-            if(dropdown && input && !input.contains(e.target) && !dropdown.contains(e.target)) {
-                dropdown.style.display = 'none';
-            }
+            if(dropdown && !input.contains(e.target) && !dropdown.contains(e.target)) dropdown.style.display = 'none';
         });
     });
 
@@ -1133,133 +927,97 @@
         nuevaFila.className = 'item-row';
         nuevaFila.innerHTML = `
             <div class="desc-container">
-                <input type="text" placeholder="Escribe para buscar por Artículo o Articulo/EAN..." class="art-desc" value="${desc}" autocomplete="off" oninput="buscarArticuloRealtime(this)" required>
+                <input type="text" placeholder="Buscar por Artículo..." class="art-desc" value="${desc}" autocomplete="off" oninput="buscarArticuloRealtime(this)" required>
                 <div class="search-dropdown" style="display:none;"></div>
             </div>
             <input type="number" placeholder="Cant" class="art-cant" value="${cant}" min="1" oninput="calcularTotales()" required>
-            <input type="number" placeholder="Precio (€)" class="art-precio" value="${precio}" step="0.01" oninput="calcularTotales()" required>
-            <button type="button" class="btn" style="background-color: #e74c3c;" onclick="eliminarFila(this)">X</button>
-        `;
+            <input type="number" placeholder="Precio" class="art-precio" value="${precio}" step="0.01" oninput="calcularTotales()" required>
+            <button type="button" class="btn" style="background-color:#e74c3c;" onclick="eliminarFila(this)">X</button>`;
         contenedor.appendChild(nuevaFila);
     }
 
     window.eliminarFila = function(btn) {
-        const filas = document.querySelectorAll('.item-row');
-        if (filas.length > 1) {
-            btn.parentElement.remove();
-            calcularTotales();
-        } else {
-            alert('El presupuesto debe contener al menos un artículo.');
-        }
+        if (document.querySelectorAll('.item-row').length > 1) { btn.parentElement.remove(); calcularTotales(); }
+        else alert('El presupuesto debe contener al menos un concepto.');
     }
 
     window.calcularTotales = function() {
         let subtotal = 0;
-        const filas = document.querySelectorAll('.item-row');
-        
-        filas.forEach(fila => {
+        document.querySelectorAll('.item-row').forEach(fila => {
             const cant = parseFloat(fila.querySelector('.art-cant').value) || 0;
             const precio = parseFloat(fila.querySelector('.art-precio').value) || 0;
             subtotal += (cant * precio);
         });
-
         const iva = subtotal * 0.21;
-        const total = subtotal + iva;
-
         document.getElementById('val-subtotal').innerText = subtotal.toFixed(2);
         document.getElementById('val-iva').innerText = iva.toFixed(2);
-        document.getElementById('val-total').innerText = total.toFixed(2);
+        document.getElementById('val-total').innerText = (subtotal + iva).toFixed(2);
     }
 
     function generarSiguienteNumeroPresupuesto() {
-        if (document.getElementById('edit-pres-id').value) return; // Si estamos editando, no alteramos el número actual.
-
-        if(presupuestos.length === 0) {
-            document.getElementById('pres-numero').value = "PRE-001";
-            return;
-        }
+        if (document.getElementById('edit-pres-id').value) return;
+        if(presupuestos.length === 0) { document.getElementById('pres-numero').value = "PRE-001"; return; }
         const numeros = presupuestos.map(p => {
             const match = p.numero.match(/\d+/);
             return match ? parseInt(match[0], 10) : 0;
         });
-        const max = Math.max(...numeros);
-        const siguiente = max + 1;
-        document.getElementById('pres-numero').value = "PRE-" + String(siguiente).padStart(3, '0');
+        document.getElementById('pres-numero').value = "PRE-" + String(Math.max(...numeros) + 1).padStart(3, '0');
     }
 
-    // --- ACCIÓN DE GUARDAR / MODIFICAR / IMPRIMIR PRESUPUESTO ---
+    // --- ACCIÓN CENTRAL GUARDAR E IMPRIMIR ---
     window.procesarPresupuesto = async function(lanzarImpresion) {
         const idEdit = document.getElementById('edit-pres-id').value;
         const clienteId = document.getElementById('select-cliente-id').value;
         const numeroPres = document.getElementById('pres-numero').value;
         
-        if (!clienteId) {
-            alert('Por favor, selecciona un cliente válido usando el buscador.');
-            return;
-        }
-        if (!miEmpresa.cif) {
-            alert('Por favor, rellena los datos de tu empresa en el icono de configuración (⚙️) antes de continuar.');
-            return;
-        }
+        if (!clienteId) { alert('Selecciona un cliente válido del buscador.'); return; }
+        if (!miEmpresa.cif) { alert('Rellena los datos de configuración corporativa.'); return; }
 
         const items = [];
-        const filas = document.querySelectorAll('.item-row');
         let formValido = true;
-
-        filas.forEach(fila => {
+        document.querySelectorAll('.item-row').forEach(fila => {
             const desc = fila.querySelector('.art-desc').value.trim();
             const cant = parseFloat(fila.querySelector('.art-cant').value) || 0;
             const precio = parseFloat(fila.querySelector('.art-precio').value) || 0;
-
             if(!desc || cant <= 0 || precio <= 0) formValido = false;
             items.push({ desc, cant, precio });
         });
 
-        if(!formValido) {
-            alert("Por favor, rellena todos los artículos con valores válidos.");
-            return;
-        }
+        if(!formValido) { alert("Completa todos los artículos con valores numéricos mayores a cero."); return; }
 
         const subtotal = parseFloat(document.getElementById('val-subtotal').innerText);
         const iva = parseFloat(document.getElementById('val-iva').innerText);
         const total = parseFloat(document.getElementById('val-total').innerText);
 
-        const objetoPresupuesto = {
+        const objPres = {
             clienteId: parseInt(clienteId, 10),
             numero: numeroPres,
             fecha: idEdit ? presupuestos.find(p => p.id === idEdit).fecha : new Date().toLocaleDateString('es-ES'),
-            items: items,
-            subtotal: subtotal,
-            iva: iva,
-            total: total
+            items, subtotal, iva, total
         };
 
         if(idEdit) {
-            objetoPresupuesto.id = idEdit;
+            objPres.id = idEdit;
             const idx = presupuestos.findIndex(p => p.id === idEdit);
-            if(idx !== -1) {
-                presupuestos[idx] = objetoPresupuesto;
-            }
+            if(idx !== -1) presupuestos[idx] = objPres;
             cancelarEdicionPresupuesto();
         } else {
-            objetoPresupuesto.id = "PRES-" + Date.now();
-            presupuestos.push(objetoPresupuesto);
+            objPres.id = "PRES-" + Date.now();
+            presupuestos.push(objPres);
         }
 
         await sincronizarConFirestore();
         mostrarToast();
-
-        inyectarVistaPreviaImpresion(objetoPresupuesto);
         actualizarTablaClientes();
 
         if (lanzarImpresion) {
-            document.getElementById('vista-previa').style.display = 'block';
-            // Dejamos un delay sutil antes de limpiar el formulario para permitir que el proceso de spooling de impresión capture el DOM
-            setTimeout(() => { 
-                window.print(); 
-                limpiarFormularioPresupuesto();
-                generarSiguienteNumeroPresupuesto();
-            }, 350);
+            // 1. Inyectamos los datos en el bloque aislado de impresión
+            inyectarDatosBloqueImpresion(objPres);
+            // 2. Ejecutamos la impresión de manera inmediata
+            window.print();
+            // 3. Limpiamos tras la llamada
+            limpiarFormularioPresupuesto();
+            generarSiguienteNumeroPresupuesto();
         } else {
             limpiarFormularioPresupuesto();
             generarSiguienteNumeroPresupuesto();
@@ -1270,30 +1028,25 @@
         document.getElementById('search-cliente').value = "";
         document.getElementById('select-cliente-id').value = "";
         document.getElementById('cliente-seleccionado-info').innerText = "";
-        
-        const contenedor = document.getElementById('lista-articulos');
-        contenedor.innerHTML = `
+        document.getElementById('lista-articulos').innerHTML = `
             <div class="item-row">
                 <div class="desc-container">
-                    <input type="text" placeholder="Escribe para buscar por Artículo o Articulo/EAN..." class="art-desc" autocomplete="off" oninput="buscarArticuloRealtime(this)" required>
+                    <input type="text" placeholder="Buscar por Descripción o Articulo/EAN..." class="art-desc" autocomplete="off" oninput="buscarArticuloRealtime(this)" required>
                     <div class="search-dropdown" style="display:none;"></div>
                 </div>
                 <input type="number" placeholder="Cant" class="art-cant" value="1" min="1" oninput="calcularTotales()" required>
-                <input type="number" placeholder="Precio (€)" class="art-precio" step="0.01" oninput="calcularTotales()" required>
-                <button type="button" class="btn" style="background-color: #e74c3c;" onclick="eliminarFila(this)">X</button>
-            </div>
-        `;
+                <input type="number" placeholder="Precio" class="art-precio" step="0.01" oninput="calcularTotales()" required>
+                <button type="button" class="btn" style="background-color:#e74c3c;" onclick="eliminarFila(this)">X</button>
+            </div>`;
         document.getElementById('val-subtotal').innerText = "0.00";
         document.getElementById('val-iva').innerText = "0.00";
         document.getElementById('val-total').innerText = "0.00";
     }
 
-    // --- MODIFICAR Y ELIMINAR PRESUPUESTOS ---
     window.cargarEditarPresupuesto = function(presId, event) {
         event.stopPropagation();
         const pres = presupuestos.find(p => p.id === presId);
         if(!pres) return;
-
         const cliente = clientes.find(c => c.id == pres.clienteId);
 
         document.getElementById('edit-pres-id').value = pres.id;
@@ -1305,18 +1058,14 @@
         }
 
         const contenedor = document.getElementById('lista-articulos');
-        contenedor.innerHTML = ''; // Vaciar
-        pres.items.forEach(item => {
-            añadirFilaArticulo(item.desc, item.cant, item.precio);
-        });
-
+        contenedor.innerHTML = '';
+        pres.items.forEach(item => { añadirFilaArticulo(item.desc, item.cant, item.precio); });
         calcularTotales();
 
         document.getElementById('titulo-form-presupuesto').innerText = "Modificar Presupuesto (" + pres.numero + ")";
         document.getElementById('btn-submit-p1').innerText = "Guardar Cambios";
         document.getElementById('btn-submit-p2').innerText = "Guardar e Imprimir Cambios";
         document.getElementById('btn-cancelar-presupuesto-edit').style.display = "inline-block";
-
         switchTab('tab-presupuestos');
     }
 
@@ -1332,7 +1081,7 @@
 
     window.eliminarPresupuesto = async function(presId, event) {
         event.stopPropagation();
-        if(confirm("¿Estás seguro de que deseas eliminar permanentemente este presupuesto?")) {
+        if(confirm("¿Eliminar este presupuesto permanentemente?")) {
             presupuestos = presupuestos.filter(p => p.id !== presId);
             await sincronizarConFirestore();
             actualizarTablaClientes();
@@ -1340,48 +1089,39 @@
         }
     }
 
-    function inyectarVistaPreviaImpresion(pres) {
+    // --- FUNCIÓN MOTOR DE INYECCIÓN DE DATOS DE IMPRESIÓN ---
+    function inyectarDatosBloqueImpresion(pres) {
         const clienteSel = clientes.find(c => c.id == pres.clienteId);
         if(!clienteSel) return;
 
         const imgPrint = document.getElementById('print-logo');
-        if (miEmpresa.logo) {
-            imgPrint.src = miEmpresa.logo;
-            imgPrint.style.display = 'block';
-        } else {
-            imgPrint.style.display = 'none';
-        }
+        if (miEmpresa.logo) { imgPrint.src = miEmpresa.logo; imgPrint.style.display = 'block'; }
+        else { imgPrint.style.display = 'none'; }
 
         document.getElementById('print-datos-empresa').innerHTML = `
             <strong>${miEmpresa.nombre}</strong><br>
             CIF: ${miEmpresa.cif}<br>
             ${miEmpresa.direccion}<br>
             ${miEmpresa.cp} - ${miEmpresa.poblacion}<br>
-            Tlf: ${miEmpresa.telefono} | Email: ${miEmpresa.email}
-        `;
+            Tlf: ${miEmpresa.telefono} | Email: ${miEmpresa.email}`;
 
         document.getElementById('print-num-pres').innerText = pres.numero;
         document.getElementById('print-fecha').innerText = pres.fecha;
-
         document.getElementById('print-datos-cliente').innerHTML = `
             <strong>Nombre:</strong> ${clienteSel.nombre} <br>
             <strong>CIF/NIF:</strong> ${clienteSel.cif} <br>
             <strong>Dirección:</strong> ${clienteSel.direccion}, ${clienteSel.cp}, ${clienteSel.poblacion} <br>
-            <strong>Contacto:</strong> ${clienteSel.telefono} | ${clienteSel.email}
-        `;
+            <strong>Contacto:</strong> ${clienteSel.telefono} | ${clienteSel.email}`;
 
-        const tbodyPrint = document.querySelector('#print-tabla-articulos tbody');
+        const tbodyPrint = document.getElementById('print-tabla-articulos-cuerpo');
         tbodyPrint.innerHTML = '';
-        
         pres.items.forEach(item => {
-            const totalFila = item.cant * item.precio;
-            const row = `<tr>
-                <td>${item.desc}</td>
-                <td style="text-align: center;">${item.cant}</td>
-                <td style="text-align: right;">${item.precio.toFixed(2)}€</td>
-                <td style="text-align: right;">${totalFila.toFixed(2)}€</td>
+            tbodyPrint.innerHTML += `<tr>
+                <td style="padding:8px; border:1px solid #ddd;">${item.desc}</td>
+                <td style="padding:8px; border:1px solid #ddd; text-align:center;">${item.cant}</td>
+                <td style="padding:8px; border:1px solid #ddd; text-align:right;">${item.precio.toFixed(2)}€</td>
+                <td style="padding:8px; border:1px solid #ddd; text-align:right;">${(item.cant * item.precio).toFixed(2)}€</td>
             </tr>`;
-            tbodyPrint.innerHTML += row;
         });
 
         document.getElementById('print-subtotal').innerText = pres.subtotal.toFixed(2);
@@ -1394,12 +1134,8 @@
         if(event) event.stopPropagation();
         const pres = presupuestos.find(p => p.id === presId);
         if(!pres) return;
-
-        inyectarVistaPreviaImpresion(pres);
-        
-        const vistaPrevia = document.getElementById('vista-previa');
-        vistaPrevia.style.display = 'block';
-        vistaPrevia.scrollIntoView({ behavior: 'smooth' });
+        inyectarDatosBloqueImpresion(pres);
+        window.print();
     }
 </script>
 </body>
